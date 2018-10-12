@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29ed7999-8864-4912-93db-a9b789efa8e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sleepPy/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/sleepPy/preprocessing.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,47 +21,84 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="16" />
-          <entry key="py" value="4" />
+          <entry key="py" value="2155" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="20" />
+          <entry key="Python" value="2171" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="3" />
+          <entry key="py" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="3" />
+          <entry key="Python" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="340" selection-start-line="340" selection-end-line="340" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="45">
+                  <caret line="147" column="56" selection-start-line="147" selection-start-column="56" selection-end-line="147" selection-end-column="56" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="12" selection-start-line="12" selection-end-line="12" />
+                  <folding>
+                    <element signature="e#44#53#0" expanded="true" />
+                    <element signature="e#341#651#1" />
+                    <element signature="e#1286#1952#0" />
+                    <element signature="e#2016#2482#0" />
+                    <element signature="e#2640#3249#0" />
+                    <element signature="e#3315#3854#0" />
+                    <element signature="e#3945#5847#0" />
+                    <element signature="e#5921#6258#0" />
+                    <element signature="e#6636#6969#0" />
+                    <element signature="e#7202#7653#0" />
+                    <element signature="e#7737#8427#0" />
+                    <element signature="e#8528#10141#0" />
+                    <element signature="e#10281#10778#0" />
+                    <element signature="e#10913#11113#0" />
+                    <element signature="e#11226#11416#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py" />
+        <option value="$PROJECT_DIR$/sleepPy/preprocessing.py" />
+      </list>
+    </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="1280" />
@@ -137,13 +173,50 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="340" selection-start-line="340" selection-end-line="340" />
+        <state relative-caret-position="180">
+          <caret line="12" selection-start-line="12" selection-end-line="12" />
+          <folding>
+            <element signature="e#44#53#0" expanded="true" />
+            <element signature="e#341#651#1" />
+            <element signature="e#1286#1952#0" />
+            <element signature="e#2016#2482#0" />
+            <element signature="e#2640#3249#0" />
+            <element signature="e#3315#3854#0" />
+            <element signature="e#3945#5847#0" />
+            <element signature="e#5921#6258#0" />
+            <element signature="e#6636#6969#0" />
+            <element signature="e#7202#7653#0" />
+            <element signature="e#7737#8427#0" />
+            <element signature="e#8528#10141#0" />
+            <element signature="e#10281#10778#0" />
+            <element signature="e#10913#11113#0" />
+            <element signature="e#11226#11416#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="615">
+          <caret line="41" column="37" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="37" />
+          <folding>
+            <marker date="1539360388139" expanded="true" signature="1288:1292" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1288:1371" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1398:1403" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1398:1436" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1398:1437" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1463:1468" ph="..." />
+            <marker date="1539360388139" expanded="true" signature="1526:1531" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="147" column="56" selection-start-line="147" selection-start-column="56" selection-end-line="147" selection-end-column="56" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
