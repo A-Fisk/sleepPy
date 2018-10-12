@@ -10,7 +10,7 @@ and Chiara McDermott FHS thesis 2018/2019
 
 | Animal | Score | FFT | VS | HypEpoch | Quality Control | New FFT | New VS | Final Hyp |
 |---|---|---|---|---|---|---|---|---|
-|LL1|<ul><li>- [x]|[ ]|[ ]|[ ]|[ ]|[ ]|[ ]|[ ]|
+|LL1|<ul><li>- [x]</li></ul>|[ ]|[ ]|[ ]|[ ]|[ ]|[ ]|[ ]|
 
 
 ### Useful resources  
