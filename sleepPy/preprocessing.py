@@ -38,9 +38,52 @@ class remove_header_FFT_files():
         
     def remove_header(self):
     
-def scan_sliceoff_header():
-    # TODO write scane sliceoffheader
-def create_new_filename():
+def scan_sliceoff_header(file_path,
+                         header="Signal"):
+    """
+    Function to read file from file
+    path and scan for the start of the
+    header (start of the actual data)
+    Returns the file contents
+    :param file_path: string
+    :param header: string - default "Signal"
+    :return: file contents cut from
+        header start
+    """
+    # read the file
+    # scan for the start
+    # slice from the start
+    with open(file_path, 'r', encoding='utf-8') as current_file:
+        file_contents = current_file.read()
+        start_of_table = re.search(header, file_contents).start()
+        file_contents_modified = file_contents[start_of_table:]
+    return file_contents_modified
+        
+def create_new_filename(old_file_path,
+                        subdir_name):
     # TODO write create new file name
 def save_filecontents():
-    # TODO write save file contents
+    # TODO write save file content
+
+#  Function to check subdirectory and create if doesn't exist
+def create_subdir(input_directory, subdir_name):
+    """
+    Function takes in Path object of input_directory
+    and string of subdir name, adds them together, checks if it
+    exists and if it doesn't creates new directory
+
+    :param input_directory:
+    :param subdir_name:
+    :return:
+    """
+
+    # create path name
+    # check if exists
+    # create it if it doesn't exist
+    # return path name
+
+    sub_dir_path = input_directory / subdir_name
+    if not sub_dir_path.exists():
+        sub_dir_path.mkdir()
+    return sub_dir_path
+s
