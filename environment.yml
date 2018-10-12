@@ -1,0 +1,10 @@
+name: sleepPy
+
+dependencies:
+- python = 3.7
+- numpy == 1.15
+- pandas == 0.23.3
+- matplotlib == 2.2.3
+- pip
+- pip:
+  - git+https://github.com/A-Fisk/sleepPy.git@master
