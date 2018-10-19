@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/tests/preprocessing_tests.py" line="49" mnemonic="4" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="29ed7999-8864-4912-93db-a9b789efa8e3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="29ed7999-8864-4912-93db-a9b789efa8e3" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -15,68 +15,160 @@
     <session id="540425900">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Python Console" value="16" />
-          <entry key="py" value="4" />
+          <entry key="Python Console" value="1050" />
+          <entry key="py" value="9275" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="20" />
+          <entry key="Python" value="10325" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="3" />
+          <entry key="py" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="3" />
+          <entry key="Python" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret line="340" selection-start-line="340" selection-end-line="340" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/development/preprocessing_removeheader.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="195">
+                  <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
+                  <folding>
+                    <element signature="e#59#73#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/tests/preprocessing_tests.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="180">
+                  <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
+                  <folding>
+                    <element signature="e#0#15#0" expanded="true" />
+                    <marker date="1539968908952" expanded="true" signature="259:264" ph="..." />
+                    <marker date="1539968908952" expanded="true" signature="1644:1653" ph="..." />
+                    <marker date="1539968908952" expanded="true" signature="2122:2131" ph="..." />
+                    <marker date="1539968908952" expanded="true" signature="2235:2239" ph="..." />
+                    <marker date="1539968908952" expanded="true" signature="2258:2267" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/tests/preprocessing_tests.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="345">
+                  <caret line="178" selection-start-line="178" selection-end-line="178" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="210">
+                  <caret line="19" selection-start-line="19" selection-end-line="19" />
+                  <folding>
+                    <element signature="e#44#53#0" expanded="true" />
+                    <element signature="e#341#651#1" />
+                    <element signature="e#1286#1952#0" />
+                    <element signature="e#2016#2482#0" />
+                    <element signature="e#2640#3249#0" />
+                    <element signature="e#3315#3854#0" />
+                    <element signature="e#3945#5847#0" />
+                    <element signature="e#5921#6258#0" />
+                    <element signature="e#6636#6969#0" />
+                    <element signature="e#7202#7653#0" />
+                    <element signature="e#7737#8427#0" />
+                    <element signature="e#8528#10141#0" />
+                    <element signature="e#10281#10778#0" />
+                    <element signature="e#10913#11113#0" />
+                    <element signature="e#11226#11416#0" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/preprocessing.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="30">
+                  <caret line="54" column="8" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="345">
+                  <caret line="62" column="40" selection-start-line="62" selection-start-column="40" selection-end-line="62" selection-end-column="40" />
+                  <folding>
+                    <marker date="1539947201902" expanded="true" signature="1278:1282" ph="..." />
+                    <marker date="1539947201902" expanded="true" signature="2537:2542" ph="..." />
+                    <marker date="1539947201902" expanded="true" signature="3263:3634" ph="..." />
+                    <marker date="1539947201902" expanded="true" signature="4071:4500" ph="..." />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py" />
+        <option value="$PROJECT_DIR$/development/preprocessing_removeheader.py" />
+        <option value="$PROJECT_DIR$/sleepPy/preprocessing.py" />
+        <option value="$PROJECT_DIR$/tests/preprocessing_tests.py" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="1280" />
-    <option name="y" value="-740" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="width" value="1280" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -95,6 +187,101 @@
       </list>
     </option>
   </component>
+  <component name="RunManager" selected="Python tests.Unittests in preprocessing_tests.py">
+    <configuration name="preprocessing_removeheader" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="sleepPy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/development" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/development/preprocessing_removeheader.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for preprocessing_tests.tests_preprocessing" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="sleepPy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;preprocessing_tests.tests_preprocessing&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="sleepPy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;preprocessing_tests.tests_preprocessing.test_create_newdir&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_scansliceoffheader" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="sleepPy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;preprocessing_tests.tests_preprocessing.test_scansliceoffheader&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests in preprocessing_tests.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="sleepPy" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/preprocessing_tests.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.preprocessing_removeheader" />
+      <item itemvalue="Python tests.Unittests in preprocessing_tests.py" />
+      <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing" />
+      <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing.test_scansliceoffheader" />
+      <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python tests.Unittests in preprocessing_tests.py" />
+        <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing.test_scansliceoffheader" />
+        <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" />
+        <item itemvalue="Python tests.Unittests for preprocessing_tests.tests_preprocessing" />
+        <item itemvalue="Python.preprocessing_removeheader" />
+      </list>
+    </recent_temporary>
+  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -108,24 +295,65 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing - 2018.10.19 at 17h 53m 50s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_preprocessing_tests_py - 2018.10.19 at 17h 55m 28s.xml">
+      <configuration name="Unittests in preprocessing_tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing_test_create_newdir - 2018.10.19 at 17h 56m 47s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing - 2018.10.19 at 17h 57m 39s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing - 2018.10.19 at 17h 59m 27s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing_test_create_newdir - 2018.10.19 at 17h 59m 45s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing_test_create_newdir - 2018.10.19 at 17h 59m 59s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_create_newdir" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_preprocessing_tests_py - 2018.10.19 at 18h 00m 17s.xml">
+      <configuration name="Unittests in preprocessing_tests.py" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_for_preprocessing_tests_tests_preprocessing_test_scansliceoffheader - 2018.10.19 at 18h 07m 00s.xml">
+      <configuration name="Unittests for preprocessing_tests.tests_preprocessing.test_scansliceoffheader" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_preprocessing_tests_py - 2018.10.19 at 18h 07m 05s.xml">
+      <configuration name="Unittests in preprocessing_tests.py" configurationId="tests" />
+    </history-entry>
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="1280" y="-740" width="1920" height="1080" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16535018" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" visible="true" weight="0.22376238" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49910232" visible="true" weight="0.118393235" />
+      <window_info id="Structure" order="1" sideWeight="0.50089765" side_tool="true" visible="true" weight="0.118393235" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32891566" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32891566" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32871288" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3313253" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -135,15 +363,82 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py" />
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/preprocessing.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="54" column="8" selection-start-line="54" selection-start-column="8" selection-end-line="54" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret line="340" selection-start-line="340" selection-end-line="340" />
+        <state relative-caret-position="210">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+          <folding>
+            <element signature="e#44#53#0" expanded="true" />
+            <element signature="e#341#651#1" />
+            <element signature="e#1286#1952#0" />
+            <element signature="e#2016#2482#0" />
+            <element signature="e#2640#3249#0" />
+            <element signature="e#3315#3854#0" />
+            <element signature="e#3945#5847#0" />
+            <element signature="e#5921#6258#0" />
+            <element signature="e#6636#6969#0" />
+            <element signature="e#7202#7653#0" />
+            <element signature="e#7737#8427#0" />
+            <element signature="e#8528#10141#0" />
+            <element signature="e#10281#10778#0" />
+            <element signature="e#10913#11113#0" />
+            <element signature="e#11226#11416#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/development/preprocessing_removeheader.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="15" selection-start-line="13" selection-start-column="15" selection-end-line="13" selection-end-column="15" />
+          <folding>
+            <element signature="e#59#73#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/tests/preprocessing_tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="178" selection-start-line="178" selection-end-line="178" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="62" column="40" selection-start-line="62" selection-start-column="40" selection-end-line="62" selection-end-column="40" />
+          <folding>
+            <marker date="1539947201902" expanded="true" signature="1278:1282" ph="..." />
+            <marker date="1539947201902" expanded="true" signature="2537:2542" ph="..." />
+            <marker date="1539947201902" expanded="true" signature="3263:3634" ph="..." />
+            <marker date="1539947201902" expanded="true" signature="4071:4500" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/preprocessing_tests.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="46" column="8" selection-start-line="46" selection-start-column="8" selection-end-line="46" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+            <marker date="1539968908952" expanded="true" signature="259:264" ph="..." />
+            <marker date="1539968908952" expanded="true" signature="1644:1653" ph="..." />
+            <marker date="1539968908952" expanded="true" signature="2122:2131" ph="..." />
+            <marker date="1539968908952" expanded="true" signature="2235:2239" ph="..." />
+            <marker date="1539968908952" expanded="true" signature="2258:2267" ph="..." />
+          </folding>
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
