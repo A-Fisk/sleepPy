@@ -4,7 +4,7 @@
 # transform power in columns
 # single file for each animal/day to analyse
 
-import pandas as pd
+import re
 
 # Class to remove header from EEG FFT output files
 class remove_header_FFT_files():
@@ -35,8 +35,34 @@ class remove_header_FFT_files():
                                                   )
                               )
         self.subdir_name = subdir_name
+        self.subdir_path = create_new_directory(self.input_dir,
+                                                self.subdir_name)
+    def remove_all_headers(self):
+        """
+        function to loop through all file in input directory
+        slice off the header adn save in a directory
+        :return:
+        """
+        for file in self.file_list:
+            remove_header_and_save(file,
+                                   save_dir_path=self.subdir_path,
+                                   save_suffix="_clean.csv")
         
-    def remove_header(self):
+def remove_header_and_save(file,
+                           save_dir_path,
+                           save_suffix):
+    """
+    Function to scan through file name, remove
+    the header and save the rest of the file
+    to a new file in another directory
+    :return:
+    """
+    file_contents = scan_sliceoff_header(file)
+    new_file_name = create_new_filename(file,
+                                        new_subdir_path=save_dir_path,
+                                        save_suffix=save_suffix)
+    save_filecontents(file_contents=file_contents,
+                      save_path=new_file_name)
     
 def scan_sliceoff_header(file_path,
                          header="Signal"):
@@ -59,8 +85,8 @@ def scan_sliceoff_header(file_path,
         file_contents_modified = file_contents[start_of_table:]
     return file_contents_modified
         
-def create_new_filename(old_file_path,
-                        subdir_name):
+def create_new_directory(input_directory,
+                         new_dir_name):
     """
     function to take old file path, take the parent
     directory and then create new directory in parent
@@ -69,30 +95,41 @@ def create_new_filename(old_file_path,
     :param subdir_name:
     :return:
     """
-    # TODO write create new file name
-    
-def save_filecontents():
-    # TODO write save file content
-
-#  Function to check subdirectory and create if doesn't exist
-def create_subdir(input_directory, subdir_name):
+    parent = input_directory.parent
+    new_dir = parent / new_dir_name
+    if not new_dir.exists():
+        new_dir.mkdir()
+    return new_dir
+  
+def save_filecontents(file_contents,
+                      save_path):
     """
-    Function takes in Path object of input_directory
-    and string of subdir name, adds them together, checks if it
-    exists and if it doesn't creates new directory
-
-    :param input_directory:
-    :param subdir_name:
+    function to save the given file contents
+    in the save path
+    :param file_contents:
+    :param save_path:
     :return:
     """
-
-    # create path name
-    # check if exists
-    # create it if it doesn't exist
-    # return path name
-
-    sub_dir_path = input_directory / subdir_name
-    if not sub_dir_path.exists():
-        sub_dir_path.mkdir()
-    return sub_dir_path
-s
+    with open(save_path, 'w', encoding='utf-8') as new_file:
+        new_file.write(file_contents)
+    
+def create_new_filename(old_filename,
+                        new_subdir_path,
+                        save_suffix):
+    """
+    function to take old file name, new subdir
+    path and new save suffix, then
+    add on the suffix to the end
+    of the file to be able to save to
+    this path
+    :param old_filename:
+    :param save_suffix:
+    :return:
+    """
+    
+    old_file_stem = old_filename.stem
+    new_file_path = (new_subdir_path /
+                     (old_file_stem +
+                     save_suffix))
+    return new_file_path
+   
