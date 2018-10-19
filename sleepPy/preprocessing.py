@@ -61,7 +61,16 @@ def scan_sliceoff_header(file_path,
         
 def create_new_filename(old_file_path,
                         subdir_name):
+    """
+    function to take old file path, take the parent
+    directory and then create new directory in parent
+    directory and save new file in there
+    :param old_file_path:
+    :param subdir_name:
+    :return:
+    """
     # TODO write create new file name
+    
 def save_filecontents():
     # TODO write save file content
 

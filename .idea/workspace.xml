@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="29ed7999-8864-4912-93db-a9b789efa8e3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sleepPy/preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/sleepPy/preprocessing.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -14,29 +15,31 @@
     <session id="540425900">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.6" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Python Console" value="16" />
-          <entry key="py" value="2155" />
+          <entry key="py" value="3228" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="2171" />
+          <entry key="Python" value="3244" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="5" />
+          <entry key="py" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="5" />
+          <entry key="Python" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -47,10 +50,15 @@
       <split-first>
         <leaf>
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py">
+            <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="45">
-                  <caret line="147" column="56" selection-start-line="147" selection-start-column="56" selection-end-line="147" selection-end-column="56" />
+                <state relative-caret-position="408">
+                  <caret line="66" column="39" selection-start-line="66" selection-start-column="39" selection-end-line="66" selection-end-column="39" />
+                  <folding>
+                    <marker date="1539883047647" expanded="true" signature="1288:1292" ph="..." />
+                    <marker date="1539883047647" expanded="true" signature="2170:2401" ph="..." />
+                    <marker date="1539883047647" expanded="true" signature="2464:2469" ph="..." />
+                  </folding>
                 </state>
               </provider>
             </entry>
@@ -59,7 +67,7 @@
       </split-first>
       <split-second>
         <leaf>
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="180">
@@ -81,6 +89,15 @@
                     <element signature="e#10913#11113#0" />
                     <element signature="e#11226#11416#0" />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/preprocessing.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="375">
+                  <caret line="103" column="4" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
                 </state>
               </provider>
             </entry>
@@ -111,8 +128,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -148,13 +165,9 @@
     <frame x="1280" y="-740" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.16535018" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08846761" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" visible="true" weight="0.22376238" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" />
@@ -162,6 +175,10 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32891566" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.27228916" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -171,6 +188,7 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py" />
     <entry file="file://$PROJECT_DIR$/../../01_projects/P3_LLEEG_Chapter3/08_analysis_files/A2_analysis_library/P3_script_library.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -197,24 +215,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/sleepPy/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="37" selection-start-line="41" selection-start-column="37" selection-end-line="41" selection-end-column="37" />
+        <state relative-caret-position="408">
+          <caret line="66" column="39" selection-start-line="66" selection-start-column="39" selection-end-line="66" selection-end-column="39" />
           <folding>
-            <marker date="1539360388139" expanded="true" signature="1288:1292" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1288:1371" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1398:1403" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1398:1436" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1398:1437" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1463:1468" ph="..." />
-            <marker date="1539360388139" expanded="true" signature="1526:1531" ph="..." />
+            <marker date="1539883047647" expanded="true" signature="1288:1292" ph="..." />
+            <marker date="1539883047647" expanded="true" signature="2170:2401" ph="..." />
+            <marker date="1539883047647" expanded="true" signature="2464:2469" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/L1_preprocessing.py">
+    <entry file="file://$PROJECT_DIR$/../actigraphy_analysis/actigraphy_analysis/preprocessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="147" column="56" selection-start-line="147" selection-start-column="56" selection-end-line="147" selection-end-column="56" />
+        <state relative-caret-position="375">
+          <caret line="103" column="4" selection-start-line="103" selection-start-column="4" selection-end-line="103" selection-end-column="4" />
         </state>
       </provider>
     </entry>
