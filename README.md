@@ -8,6 +8,8 @@ Analysis scripts for Angus Fisk DPhil Thesis
 and Chiara McDermott FHS thesis 2018/2019  
 
 
+https://travis-ci.org/A-Fisk/sleepPy.svg?branch=master  
+
 | Animal | Day | Score | FFT | VS | HypEpoch | Quality Control | New FFT | New VS | Final Hyp |  
 |---|---|---|---|---|---|---|---|---|---|  
 |LL1|10|x||||||||  
