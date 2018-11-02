@@ -34,3 +34,4 @@ and Chiara McDermott FHS thesis 2018/2019
 ## Useful resources  
 
 1. Introduction to python - https://docs.python-guide.org/# 
+2. Introduction to pandas - https://jakevdp.github.io/PythonDataScienceHandbook/03.01-introducing-pandas-objects.html 
