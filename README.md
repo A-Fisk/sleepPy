@@ -24,7 +24,7 @@ and Chiara McDermott FHS thesis 2018/2019
 |LL5|12|x||||||||   
 |LL6|10|x|||||||||   
 |LL6|11|x|||||||||   
-|LL6|12||||||||||   
+|LL6|12|x|||||||||   
 |LL7|10|x|x|x|x|x|x|x|x|x|   
 |LL7|11|x|x|x|x|x|x|x|x|x|  
 |LL7|12|x|x|x|x|x|x|x|x|x|  
