@@ -7,6 +7,8 @@ to then analyse various aspects of sleep
 Analysis scripts for Angus Fisk DPhil Thesis
 and Chiara McDermott FHS thesis 2018/2019  
 
+# BASIC SCORING COMPLETE - PARTY TIME 2/11/2018
+
 
 | Animal | Day | Score | FFT | VS | HypEpoch | Quality Control | New FFT | New VS | Final Hyp |  
 |---|---|---|---|---|---|---|---|---|---|  
