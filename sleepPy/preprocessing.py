@@ -5,6 +5,66 @@
 # single file for each animal/day to analyse
 
 import re
+import pandas as pd
+from actigraphy_analysis.preprocessing import SaveObjectPipeline
+
+# class PipelineObject():
+#     """
+#     Class to apply given function to a list of files in a directory
+#     """
+#     def __init__(self,
+#                  input_dir,
+#                  save_dir,
+#                  search_suffix=".csv",
+#                  read_files=True):
+#         # glob all the file in the input dir
+#         # read them into a file if read_files is True
+#         # set all the class attributes
+#         self.input_dir = input_dir
+#         self.search_suffix = search_suffix
+#         self.file_list = list(self.input_dir.glob("*" +
+#                                                   self.search_suffix))
+#         self.save_dir = save_dir
+#         self.df_list = []
+#         self.process_list = []
+#         if read_files:
+#             for file in self.file_list:
+#                 temp_df = pd.read_csv(file,
+#                                       index_col=0)
+#                 self.df_list.append(temp_df)
+#
+#     def process_file(self,
+#                      module_name,
+#                      function_name,
+#                      subdir_name,
+#                      save_suffix=".csv",
+#                      working_list=self.df_list,
+#                      save_file=False,
+#                      *args,
+#                      **kwargs):
+#         """
+#         Method for applying the given function to all the
+#         files in the file list or
+#         :return:
+#         """
+#         # define the function
+#         # call it on all objects in the list
+#         # create name and save dfs there
+#
+#         save_dir_path = create_new_directory(self.save_dir,
+#                                              new_dir_name=subdir_name)
+#         func = getattr(module, function_name)
+#
+#         for df, file in zip(working_list, self.file_list):
+#             temp_df = func(df, *args, **kwargs)
+#             self.process_list.append(temp_df)
+#             if save_file:
+#                 file_name_path = create_new_filename(file,
+#                                                      save_dir_path,
+#                                                      save_suffix)
+#                 temp_df.to_csv(file_name_path)
+#
+#     def
 
 # Class to remove header from EEG FFT output files
 class remove_header_FFT_files():
