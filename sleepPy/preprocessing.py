@@ -24,8 +24,9 @@ class remove_header_FFT_files():
     
     def __init__(self,
                  input_dir,
-                 search_suffix='.csv',
-                 subdir_name="clean/"):
+                 save_dir,
+                 subdir_name,
+                 search_suffix='.txt'):
         # find all the files in the input
         # directory by globbing for csv files
         self.input_dir = input_dir
@@ -34,9 +35,10 @@ class remove_header_FFT_files():
                                                   self.search_suffix
                                                   )
                               )
-        self.subdir_name = subdir_name
-        self.subdir_path = create_new_directory(self.input_dir,
-                                                self.subdir_name)
+        self.save_dir = save_dir
+        self.subdir = subdir_name
+        self.save_dir_path = create_new_directory(self.save_dir,
+                                                  self.subdir)
     def remove_all_headers(self):
         """
         function to loop through all file in input directory
@@ -45,7 +47,7 @@ class remove_header_FFT_files():
         """
         for file in self.file_list:
             remove_header_and_save(file,
-                                   save_dir_path=self.subdir_path,
+                                   save_dir_path=self.save_dir_path,
                                    save_suffix="_clean.csv")
         
 def remove_header_and_save(file,
@@ -84,7 +86,7 @@ def scan_sliceoff_header(file_path,
         start_of_table = re.search(header, file_contents).start()
         file_contents_modified = file_contents[start_of_table:]
     return file_contents_modified
-        
+    
 def create_new_directory(input_directory,
                          new_dir_name):
     """

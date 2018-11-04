@@ -8,3 +8,4 @@ dependencies:
 - pip
 - pip:
   - git+https://github.com/A-Fisk/sleepPy.git@master
+  - git+https://github.com/A-Fisk/actigraphy_analysis.git@master
