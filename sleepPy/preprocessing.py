@@ -5,114 +5,16 @@
 # single file for each animal/day to analyse
 
 import re
+import sys
 import pandas as pd
-from actigraphy_analysis.preprocessing import SaveObjectPipeline
+import numpy as np
+sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
+                "actigraphy_analysis")
+from actigraphy_analysis.preprocessing \
+    import SaveObjectPipeline, create_file_name_path, create_subdir, \
+        remove_object_col
 
-# class PipelineObject():
-#     """
-#     Class to apply given function to a list of files in a directory
-#     """
-#     def __init__(self,
-#                  input_dir,
-#                  save_dir,
-#                  search_suffix=".csv",
-#                  read_files=True):
-#         # glob all the file in the input dir
-#         # read them into a file if read_files is True
-#         # set all the class attributes
-#         self.input_dir = input_dir
-#         self.search_suffix = search_suffix
-#         self.file_list = list(self.input_dir.glob("*" +
-#                                                   self.search_suffix))
-#         self.save_dir = save_dir
-#         self.df_list = []
-#         self.process_list = []
-#         if read_files:
-#             for file in self.file_list:
-#                 temp_df = pd.read_csv(file,
-#                                       index_col=0)
-#                 self.df_list.append(temp_df)
-#
-#     def process_file(self,
-#                      module_name,
-#                      function_name,
-#                      subdir_name,
-#                      save_suffix=".csv",
-#                      working_list=self.df_list,
-#                      save_file=False,
-#                      *args,
-#                      **kwargs):
-#         """
-#         Method for applying the given function to all the
-#         files in the file list or
-#         :return:
-#         """
-#         # define the function
-#         # call it on all objects in the list
-#         # create name and save dfs there
-#
-#         save_dir_path = create_new_directory(self.save_dir,
-#                                              new_dir_name=subdir_name)
-#         func = getattr(module, function_name)
-#
-#         for df, file in zip(working_list, self.file_list):
-#             temp_df = func(df, *args, **kwargs)
-#             self.process_list.append(temp_df)
-#             if save_file:
-#                 file_name_path = create_new_filename(file,
-#                                                      save_dir_path,
-#                                                      save_suffix)
-#                 temp_df.to_csv(file_name_path)
-#
-#     def
-
-# Class to remove header from EEG FFT output files
-class remove_header_FFT_files():
-    """
-    Class object for removing header from FFT files
-    Globs directory for files, the searches for start of table
-    in each file, then saves all in a subdirectory
-    :param file_path: string - directory of where to find the
-        files
-    :param subdir_name: string - where to save output
-        default "Clean/"
-    :param search_suffix - string, what to glob for
-        default ".csv"
-    :return: saves output in subdirectory in the
-        file path string
-    """
-    
-    def __init__(self,
-                 input_dir,
-                 save_dir,
-                 subdir_name,
-                 search_suffix='.txt'):
-        # find all the files in the input
-        # directory by globbing for csv files
-        self.input_dir = input_dir
-        self.search_suffix = search_suffix
-        self.file_list = list(self.input_dir.glob("*" +
-                                                  self.search_suffix
-                                                  )
-                              )
-        self.save_dir = save_dir
-        self.subdir = subdir_name
-        self.save_dir_path = create_new_directory(self.save_dir,
-                                                  self.subdir)
-    def remove_all_headers(self):
-        """
-        function to loop through all file in input directory
-        slice off the header adn save in a directory
-        :return:
-        """
-        for file in self.file_list:
-            remove_header_and_save(file,
-                                   save_dir_path=self.save_dir_path,
-                                   save_suffix="_clean.csv")
-        
-def remove_header_and_save(file,
-                           save_dir_path,
-                           save_suffix):
+def remove_header_and_save(file,**kwargs):
     """
     Function to scan through file name, remove
     the header and save the rest of the file
@@ -120,9 +22,10 @@ def remove_header_and_save(file,
     :return:
     """
     file_contents = scan_sliceoff_header(file)
-    new_file_name = create_new_filename(file,
-                                        new_subdir_path=save_dir_path,
-                                        save_suffix=save_suffix)
+    new_file_name = create_file_name_path(directory=kwargs["save_dir_path"],
+                                          file=file,
+                                          save_suffix=kwargs[
+                                              "save_suffix_file"])
     save_filecontents(file_contents=file_contents,
                       save_path=new_file_name)
     
@@ -147,22 +50,6 @@ def scan_sliceoff_header(file_path,
         file_contents_modified = file_contents[start_of_table:]
     return file_contents_modified
     
-def create_new_directory(input_directory,
-                         new_dir_name):
-    """
-    function to take old file path, take the parent
-    directory and then create new directory in parent
-    directory and save new file in there
-    :param old_file_path:
-    :param subdir_name:
-    :return:
-    """
-    parent = input_directory.parent
-    new_dir = parent / new_dir_name
-    if not new_dir.exists():
-        new_dir.mkdir()
-    return new_dir
-  
 def save_filecontents(file_contents,
                       save_path):
     """
@@ -175,23 +62,65 @@ def save_filecontents(file_contents,
     with open(save_path, 'w', encoding='utf-8') as new_file:
         new_file.write(file_contents)
     
-def create_new_filename(old_filename,
-                        new_subdir_path,
-                        save_suffix):
+def read_file_to_df(file_path,
+                    check_cols=True):
     """
-    function to take old file name, new subdir
-    path and new save suffix, then
-    add on the suffix to the end
-    of the file to be able to save to
-    this path
-    :param old_filename:
-    :param save_suffix:
+    Function to read in fourier transformed data
+    :param file_path:
+    :return:
+    """
+    data = pd.read_csv(file_path,
+                       header=1,
+                       index_col=[0,2],
+                       parse_dates=True)
+    data = data.drop(data.columns[-1], axis=1)
+    name = file_path.stem
+    data.name = name
+    if check_cols:
+        check_data_columns(data)
+    return data
+    
+def check_data_columns(data):
+        """
+        checks data has been imported correctly by checking the value
+        of the first column
+        
+        """
+        hz_column = data.iloc[:,3].name
+        if not hz_column == "0.500000Hz"
+            raise ValueError("Incorrect column name")
+        return None
+
+def artefacts_null(data,
+                   stage_column="Stage",
+                   stages_list=["W","NR","R","M"]):
+    """
+    Function to set all values which aren't in
+     stages_list to np.nan, aimed to remove artefact values
+    :param data:
+    :param stage_column:
+    :param stages_list:
+    :return:
+    """
+    # create a mask of where the Stage is in the whitelist
+    # remove object column
+    # set all the values outside the mask to be nan
+    # reset the object column
+    # return the new data
+    artefact_mask = data.loc[:,stage_column].isin(stages_list)
+    df_nocol, cols = remove_object_col(data, return_cols=True)
+    masked_data = df_nocol.where(artefact_mask, other=np.nan)
+    for col in cols:
+        col_name = col.name
+        masked_data[col_name] = col
+    return masked_data
+
+def sum_power(data,
+              range_to_sum):
+    """
+    Function to sum over the range given as a string for column names
+    :param data:
+    :param range_to_sum:
     :return:
     """
     
-    old_file_stem = old_filename.stem
-    new_file_path = (new_subdir_path /
-                     (old_file_stem +
-                     save_suffix))
-    return new_file_path
-   
