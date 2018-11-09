@@ -63,7 +63,7 @@ def save_filecontents(file_contents,
         new_file.write(file_contents)
     
 def read_file_to_df(file_path,
-                    index_col=[0,2],
+                    index_col=[2],
                     header=1,
                     check_cols=True,
                     rename_cols=True):
@@ -75,8 +75,9 @@ def read_file_to_df(file_path,
     data = pd.read_csv(file_path,
                        header=header,
                        index_col=index_col,
-                       parse_dates=True)
-    data = data.drop(data.columns[-1], axis=1)
+                       parse_dates=True,
+                       dayfirst=True)
+    data = data.drop([data.columns[0],data.columns[-1]], axis=1)
     name = file_path.stem
     data.name = name
     if check_cols:
