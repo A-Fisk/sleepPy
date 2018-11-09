@@ -63,21 +63,26 @@ def save_filecontents(file_contents,
         new_file.write(file_contents)
     
 def read_file_to_df(file_path,
-                    check_cols=True):
+                    index_col=[0,2],
+                    header=1,
+                    check_cols=True,
+                    rename_cols=True):
     """
     Function to read in fourier transformed data
     :param file_path:
     :return:
     """
     data = pd.read_csv(file_path,
-                       header=1,
-                       index_col=[0,2],
+                       header=header,
+                       index_col=index_col,
                        parse_dates=True)
     data = data.drop(data.columns[-1], axis=1)
     name = file_path.stem
     data.name = name
     if check_cols:
         check_data_columns(data)
+    if rename_cols:
+        data = remove_extra_zeros(data)
     return data
     
 def check_data_columns(data):
@@ -86,10 +91,23 @@ def check_data_columns(data):
         of the first column
         
         """
-        hz_column = data.iloc[:,3].name
-        if not hz_column == "0.500000Hz"
+        hz_column = data.columns[3]
+        if not hz_column == "0.500000Hz":
             raise ValueError("Incorrect column name")
         return None
+
+def remove_extra_zeros(data):
+    """
+    Function to remove last 4 zeros from column names to make easier to slice
+    """
+    col_list = []
+    for col in data.columns:
+        if "0000" in col:
+            col = col[:-6] + col[-2:]
+        col_list.append(col)
+    data.columns = col_list
+    return data
+    
 
 def artefacts_null(data,
                    stage_column="Stage",
@@ -123,4 +141,29 @@ def sum_power(data,
     :param range_to_sum:
     :return:
     """
-    
+    # select just the columns want to sum and return those values
+    start = data.columns.get_loc(range_to_sum[0])
+    fin = data.columns.get_loc(range_to_sum[1])
+    sliced_by_freq = data.iloc[:,start:fin]
+    summed = pd.DataFrame(sliced_by_freq.sum(axis=1))
+    return summed
+
+def create_df_for_single_band(data,
+                              name_of_band,
+                              range_to_sum):
+    """
+    Function to remove object column, sum up frequency, then add
+    back in the sleep stage data and name the column
+    :param data:
+    :param name_of_band:
+    :param range_to_sum:
+    :return:
+    """
+    data_removed, cols = remove_object_col(data, return_cols=True)
+    data_summed = sum_power(data_removed,
+                            range_to_sum=range_to_sum)
+    data_summed.columns = name_of_band
+    for col in cols:
+        data_summed[col.name] = col
+    return data_summed
+
