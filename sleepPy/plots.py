@@ -51,6 +51,7 @@ def plot_by_stage(data,
             df_plot = df_plot.reset_index(drop=True)
         label = df.iloc[0,label_col]
         ax.plot(df_plot, colour_keys[label], label=label)
+    ax.set(xlim=[data.index[0], data.index[-1]])
     fig.legend(loc="upper right")
     
     # tidy up with kwargs and labels
@@ -121,3 +122,85 @@ def _sort_separated_list(data_list,
                          key=lambda x:x.iloc[0,label_col],
                          reverse=False)
     return sorted_list
+
+
+def _plot_cumulative_stage(data,
+                           *args,
+                           **kwargs):
+    """
+    Function to take in data of scored stage and do a cumulative plot of
+    each column on the same axis
+    :param data:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+
+    fig, ax = plt.subplots()
+
+    for col in data:
+        data_to_plot = data.loc[:,col]
+        ax.plot(data_to_plot,
+                label=col)
+    fig.legend()
+    ax.set(xlim=[data.index[0], data.index[-1]])
+    
+    # tidy up with kwargs and labels
+    fig.autofmt_xdate()
+    xfmt = mdates.DateFormatter("%H:%M:%S")
+    ax.xaxis.set_major_formatter(xfmt)
+    interval = 2
+    if "interval" in kwargs:
+        interval = kwargs["interval"]
+    ax.xaxis.set_major_locator(mdates.HourLocator(interval=interval))
+
+    xlabel = "ZT/CT"
+    if "xlabel" in kwargs:
+        xlabel = kwargs["xlabel"]
+    ax.set_xlabel(xlabel)
+
+    ylabel = "Cumulative stage (Hours)"
+    if "ylabel" in kwargs:
+        ylabel = kwargs["ylabel"]
+    ax.set_ylabel(ylabel)
+
+    title = "Cumulative stage over days"
+    if "title" in kwargs:
+        title = kwargs["title"]
+    fig.suptitle(title)
+
+    if "figsize" in kwargs:
+        fig.set_size_inches(kwargs["figsize"])
+    if "showfig" in kwargs and kwargs["showfig"]:
+        plt.show()
+    if "savefig" in kwargs and kwargs["savefig"]:
+        plt.savefig(kwargs["fname"])
+        plt.close()
+     
+def plot_cumulative_from_stage_df(data,
+                                  stages=None,
+                                  base_freq=None,
+                                  target_freq=None,
+                                  end_of_title=3,
+                                  *args,
+                                  **kwargs):
+    """
+    Function to take in raw dataframe that has been read in and
+        plot the cumulative sum of all the columns on the same axis
+    :param scored_df:
+    :param base_freq:
+    :param target_freq:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    scored_df = prep.score_whole_df(data,stages)
+    cumsum_df = scored_df.cumsum()
+    data = prep.convert_to_units(cumsum_df,
+                                 base_freq,
+                                 target_freq)
+    kwargs["title"] = kwargs["fname"].stem[:end_of_title]
+    _plot_cumulative_stage(data,
+                           *args,
+                           **kwargs)
+    

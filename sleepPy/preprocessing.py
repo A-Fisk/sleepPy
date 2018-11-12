@@ -66,7 +66,8 @@ def read_file_to_df(file_path,
                     index_col=[2],
                     header=1,
                     check_cols=True,
-                    rename_cols=True):
+                    rename_cols=True,
+                    drop_cols=True):
     """
     Function to read in fourier transformed data
     :param file_path:
@@ -77,7 +78,8 @@ def read_file_to_df(file_path,
                        index_col=index_col,
                        parse_dates=True,
                        dayfirst=True)
-    data = data.drop([data.columns[0],data.columns[-1]], axis=1)
+    if drop_cols:
+        data = data.drop([data.columns[0],data.columns[-1]], axis=1)
     name = file_path.stem
     data.name = name
     if check_cols:
@@ -168,3 +170,145 @@ def create_df_for_single_band(data,
         data_summed[col.name] = col
     return data_summed
 
+def create_scored_df(data,
+                     stages_to_score,
+                     stage_col="Stage"):
+    """
+    Function to create dataframe scoring the given stages all as 1
+        returns same dataframe and full FFT but changes stage column
+        to int of stages, can be used to score sleep and wake totals
+    :param data:
+    :param stages_to_score:
+    :param stage_col:
+    :return:
+    """
+    df = data.copy()
+    scored_column = df.loc[:,stage_col].isin(stages_to_score).astype(int)
+    df[stage_col] = scored_column
+    return df
+
+
+def get_all_files_per_animal(input_dir,
+                             anim_range=[0,3],
+                             derivation_range=[11,14],
+                             der_no=0):
+    """
+    Function to get a list of file names of a single derivation for
+    each animal
+    :param file_list:
+    :param anim_range:
+    :param derivation_range:
+    :return:
+    """
+    file_list = list(input_dir.glob("*.csv"))
+    
+    # get all the animal names and derivation_names
+    anim_list = []
+    der_list = []
+    for file in file_list:
+        anim = file.name[anim_range[0]:anim_range[-1]]
+        anim_list.append(anim)
+        der = file.name[derivation_range[0]:derivation_range[-1]]
+        der_list.append(der)
+    unique_anim = list(set(anim_list))
+    unique_ders = list(set(der_list))
+
+    dict_animal_day_files = {}
+    der_to_use = unique_ders[der_no]
+    for animal in unique_anim:
+        animal_day_files = sorted(input_dir.glob(animal+"*"+der_to_use+"*.csv"))
+        dict_animal_day_files[animal] = animal_day_files
+    
+    return dict_animal_day_files
+
+
+def create_stage_df(anim_file,
+                    stage_col="Stage",
+                    day_range=(4,10),
+                    **kwargs):
+    """
+    Function to import all the files in the anim file list,
+        grab just the stage column, append it to a new df
+    :param anim_file:
+    :param stage_col:
+    :return:
+    """
+
+    list_of_stage_cols = []
+    for file in anim_file:
+        df = read_file_to_df(file,**kwargs)
+        stage_column = df.loc[:,stage_col]
+        day_name = file.stem[day_range[0]:day_range[-1]]
+        stage_column.name = day_name
+        list_of_stage_cols.append(stage_column)
+    all_days_df = pd.concat(list_of_stage_cols, axis=1)
+
+    return all_days_df
+
+
+def create_stage_csv(input_dir,
+                     save_dir,
+                     subdir_name,
+                     save_suffix="_stages.csv",
+                     **kwargs):
+    """
+    Function to take in input dir and then save all in an output
+    :param input_dir:
+    :param save_path:
+    :return:
+    """
+    save_subdir = create_subdir(save_dir, subdir_name)
+    all_files_per_animal = get_all_files_per_animal(input_dir=input_dir)
+    for animal in all_files_per_animal:
+        save_path = save_subdir / (animal + save_suffix)
+        stage_df = create_stage_df(all_files_per_animal[animal],**kwargs)
+        stage_df.to_csv(save_path)
+        
+        
+def reindex_file(data,
+                 start_index="2018-01-01 00:00:00",
+                 freq="4S"):
+    """
+    Function to take in old dataframe, create new index and return
+    :param data:
+    :param start_index:
+    :param freq:
+    :return:
+    """
+    index = pd.DatetimeIndex(start=start_index,
+                             freq=freq,
+                             periods=len(data))
+    data.index = index
+    return data
+
+
+def score_whole_df(data,
+                   stages):
+    """
+    Function to score all the columns in the df - useful for stage df
+    :param data:
+    :param stages:
+    :return:
+    """
+    sleep_df = data.copy()
+    for col in sleep_df.columns:
+        sleep_df = create_scored_df(sleep_df,
+                                    stages_to_score=stages,
+                                    stage_col=col)
+    return sleep_df
+
+def convert_to_units(data,
+                     base_freq,
+                     target_freq):
+    """
+    Function to convert data from current frequency
+    :param data:
+    :param base_freq:
+    :param target_freq:
+    :return:
+    """
+    base_secs = pd.Timedelta(base_freq).total_seconds()
+    target_secs = pd.Timedelta(target_freq).total_seconds()
+    new_data = data.copy()
+    new_data = (new_data * base_secs) / target_secs
+    return new_data
