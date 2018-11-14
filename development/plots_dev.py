@@ -26,15 +26,7 @@ file_list = sorted(input_dir.glob("*.csv"))
 file = file_list[0]
 df = prep.read_file_to_df(file,
                           **read_kwargs)
-#
-# delta_df = prep.create_df_for_single_band(df,
-#                                           name_of_band=["Delta"],
-#                                           range_to_sum=("0.50Hz", "4.00Hz"))
-# data_list = _split_list_of_derivations(delta_df)
 
-# _plot_hypnogram_from_list(data_list)
-    
-splot.plot_hypnogram_from_df(df,
-                       showfig=True)
+
 
 

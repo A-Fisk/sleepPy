@@ -159,11 +159,11 @@ def read_clean_fft_file(file=(),
                                         index_times=index_times)
     
     # Remove all non-float values (remaining "Signal" in the EpochNo columns)
-    # and set the time index to start at 00:00:00
     modified_list = _remove_str_row_list(data_list=list_of_dfs,
                                          test_index_range=test_index_range)
     
     # add the derivation as a final column
+    # and set the time index to start at 00:00:00
     derivation_dfs = _add_derivation_and_index(data_list=modified_list,
                                               derivation_list=derivation_list,
                                               der_label=der_label,
@@ -286,7 +286,7 @@ def create_scored_df(data,
 def get_all_files_per_animal(file_list,
                              anim_range=[0,3]):
     """
-    Function to get a list of file names of a single derivation for
+    Function to get a list of file names for a single animal
     each animal
     :param file_list:
     :param anim_range:
@@ -310,30 +310,6 @@ def get_all_files_per_animal(file_list,
         dict_animal_day_files[animal] = animal_day_files
     
     return dict_animal_day_files
-
-
-def create_stage_df(anim_file,
-                    stage_col="Stage",
-                    day_range=(4,10),
-                    **kwargs):
-    """
-    Function to import all the files in the anim file list,
-        grab just the stage column, append it to a new df
-    :param anim_file:
-    :param stage_col:
-    :return:
-    """
-
-    list_of_stage_cols = []
-    for file in anim_file:
-        df = read_file_to_df(file,**kwargs)
-        stage_column = df.loc[:,stage_col]
-        day_name = file.stem[day_range[0]:day_range[-1]]
-        stage_column.name = day_name
-        list_of_stage_cols.append(stage_column)
-    all_days_df = pd.concat(list_of_stage_cols, axis=1)
-
-    return all_days_df
 
 
 def create_stage_csv(input_dir,
@@ -404,10 +380,10 @@ def convert_to_units(data,
     return new_data
 
 
-def _get_derivation_values(data,
-                           level_of_index=0):
-    derivation_values = data.index.get_level_values(level_of_index).unique()
-    return derivation_values
+def _get_index_values(data,
+                      level_of_index=0):
+    index_values = data.index.get_level_values(level_of_index).unique()
+    return index_values
     
 def _split_list_of_derivations(data,
                                level_of_index=0):
