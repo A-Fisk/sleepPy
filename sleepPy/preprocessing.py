@@ -14,79 +14,174 @@ from actigraphy_analysis.preprocessing \
     import SaveObjectPipeline, create_file_name_path, create_subdir, \
         remove_object_col
 
-def remove_header_and_save(file,**kwargs):
+
+
+def _create_index_list(data=(),
+                       no_of_channels=()):
     """
-    Function to scan through file name, remove
-    the header and save the rest of the file
-    to a new file in another directory
+    # create a list containing the correct number of signal strings
+    # and create a filter to find where they are in the data
+    :param data:
+    :param no_of_channels:
     :return:
     """
-    file_contents = scan_sliceoff_header(file)
-    new_file_name = create_file_name_path(directory=kwargs["save_dir_path"],
-                                          file=file,
-                                          save_suffix=kwargs[
-                                              "save_suffix_file"])
-    save_filecontents(file_contents=file_contents,
-                      save_path=new_file_name)
-    
-def scan_sliceoff_header(file_path,
-                         header="Signal"):
+    # create a list containing the correct number of signal strings
+    # and create a filter to find where they are in the data
+    signal_list = ["Signal %s" % num for num in range(no_of_channels)]
+    filter = data.iloc[:,0].isin(signal_list)
+    index_times = list(data.index[filter])
+    index_times.insert(0, 0)
+    final_index = data.index[-1]
+    index_times.append(final_index)
+    return index_times
+
+
+def _slice_by_index_times(data=(),
+                          index_times=()):
     """
-    Function to read file from file
-    path and scan for the start of the
-    header (start of the actual data)
-    Returns the file contents
-    :param file_path: string
-    :param header: string - default "Signal"
-    :return: file contents cut from
-        header start
-    """
-    # read the file
-    # scan for the start
-    # slice from the start
-    with open(file_path, 'r', encoding='utf-8') as current_file:
-        file_contents = current_file.read()
-        start_of_table = re.search(header, file_contents).start()
-        file_contents_modified = file_contents[start_of_table:]
-    return file_contents_modified
-    
-def save_filecontents(file_contents,
-                      save_path):
-    """
-    function to save the given file contents
-    in the save path
-    :param file_contents:
-    :param save_path:
+    Function to create list of dataframes between the index times given
+    :param data:
+    :param index_times:
     :return:
     """
-    with open(save_path, 'w', encoding='utf-8') as new_file:
-        new_file.write(file_contents)
-    
-def read_file_to_df(file_path,
-                    index_col=[2],
-                    header=1,
-                    check_cols=True,
-                    rename_cols=True,
-                    drop_cols=True):
+    # Create list of dataframes by slicing between the index times
+    list_of_dfs = []
+    for index_start, index_end in zip(index_times[:-1], index_times[1:]):
+        temp_df = data.loc[index_start:index_end].copy()
+        list_of_dfs.append(temp_df)
+    return list_of_dfs
+
+
+def _remove_str_rows(data=(),
+                     test_index_range=(),
+                     col_no=0):
     """
-    Function to read in fourier transformed data
-    :param file_path:
+    Function to test the test index row in col given for a float,
+    removes the row if can't turn into float
+    :param data:
+    :param test_index_range:
+    :param col_no:
     :return:
     """
-    data = pd.read_csv(file_path,
-                       header=header,
-                       index_col=index_col,
-                       parse_dates=True,
-                       dayfirst=True)
-    if drop_cols:
-        data = data.drop([data.columns[0],data.columns[-1]], axis=1)
-    name = file_path.stem
-    data.name = name
+    remove_index=[]
+    df = data.copy()
+    col_data = df.iloc[:,col_no]
+    test_index = col_data.index[test_index_range]
+    for index in test_index:
+        try:
+            float(col_data[index])
+        except:
+            remove_index.append(index)
+    df.drop(remove_index, inplace=True)
+    return df
+
+
+def _remove_str_row_list(data_list=(),
+                         test_index_range=(),
+                         col_no=0):
+    """
+    Function to loop over each dataframe in given list and remove
+    the non-floatable rows
+    :param data_list:
+    :param test_index_range:
+    :param col_no:
+    :return:
+    """
+    modified_list = []
+    for df in data_list:
+        temp_df = _remove_str_rows(df,
+                                   test_index_range=test_index_range,
+                                   col_no=col_no)
+        modified_list.append(temp_df)
+    return modified_list
+
+
+def _add_derivation_and_index(data_list=(),
+                              derivation_list=("fro", "occ", "foc"),
+                              der_label="Derivation",
+                              time_column="Time"):
+    """
+    Function to add in derivation column and re-index the time column
+    starting at 00:00:00
+    :param data_list:
+    :param derivation_list:
+    :param der_label:
+    :return:
+    """
+    # Create column labelling between the signals as the derivation
+    # which can then be used to create a multi-index
+    for dataframe, derivation in zip(data_list, derivation_list):
+        dataframe.loc[:,der_label] = derivation
+        # alter the time column as index too
+        dataframe.set_index(time_column, inplace=True)
+        dataframe = reindex_file(dataframe)
+        dataframe.reset_index(inplace=True)
+        dataframe.rename(columns={
+            dataframe.columns[0]:time_column
+        }, inplace=True
+        )
+    return data_list
+
+
+def read_clean_fft_file(file=(),
+                        header=17,
+                        derivation_list=["fro", "occ", "foc"],
+                        der_label="Derivation",
+                        time_index_column=(2),
+                        test_index_range=[0,1,2,-2,-1],
+                        check_cols=True,
+                        rename_cols=True,
+                        **kwargs):
+    """
+    Function to read in the raw file from sleepsign output and tidy properly
+    creates multi-index of derivations and resets time index
+    returns as a multi-indexed cleaned dataframe
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    no_of_channels = len(derivation_list)
+    # read the file into a dataframe and slice off the header
+    df = pd.read_csv(file,
+                     header=header)
+    df.pop(df.columns[-1])
+    
+    # find the places where "Signal" isi n the index
+    index_times = _create_index_list(data=df,
+                                     no_of_channels=no_of_channels)
+    # Create list of index columns we can use later to set the correct
+    # index columns
+    index_columns = [der_label, df.columns[time_index_column]]
+
+    # Separate df out into a list with a single dataframe for each
+    # derivation
+    list_of_dfs = _slice_by_index_times(data=df,
+                                        index_times=index_times)
+    
+    # Remove all non-float values (remaining "Signal" in the EpochNo columns)
+    # and set the time index to start at 00:00:00
+    modified_list = _remove_str_row_list(data_list=list_of_dfs,
+                                         test_index_range=test_index_range)
+    
+    # add the derivation as a final column
+    derivation_dfs = _add_derivation_and_index(data_list=modified_list,
+                                              derivation_list=derivation_list,
+                                              der_label=der_label,
+                                              time_column=index_columns[1])
+
+    # put back together and set the index as we want it
+    final_df = pd.concat(derivation_dfs)
+    final_df.set_index(index_columns, inplace=True)
+    final_df.pop(final_df.columns[0])
+    final_df.name = file.stem
+    
     if check_cols:
-        check_data_columns(data)
+        check_data_columns(final_df)
     if rename_cols:
-        data = remove_extra_zeros(data)
-    return data
+        final_df = remove_extra_zeros(final_df)
+    
+    return final_df
+
     
 def check_data_columns(data):
         """
@@ -191,6 +286,7 @@ def create_scored_df(data,
 def get_all_files_per_animal(input_dir,
                              anim_range=[0,3],
                              derivation_range=[11,14],
+                             single_der=True,
                              der_no=0):
     """
     Function to get a list of file names of a single derivation for
@@ -213,10 +309,18 @@ def get_all_files_per_animal(input_dir,
     unique_anim = list(set(anim_list))
     unique_ders = list(set(der_list))
 
+    # read all the file names for a single or all derivations into the dict
     dict_animal_day_files = {}
     der_to_use = unique_ders[der_no]
     for animal in unique_anim:
-        animal_day_files = sorted(input_dir.glob(animal+"*"+der_to_use+"*.csv"))
+        if single_der:
+            animal_day_files = sorted(
+                input_dir.glob(animal+"*"+der_to_use+"*.csv")
+            )
+        else:
+            animal_day_files = sorted(
+                 input_dir.glob(animal+"*.csv")
+            )
         dict_animal_day_files[animal] = animal_day_files
     
     return dict_animal_day_files

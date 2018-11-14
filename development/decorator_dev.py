@@ -37,15 +37,13 @@ wake_df = prep.score_whole_df(df,wake_stage)
 
 
 sleep_cumsum = sleep_df.cumsum()
-data = sleep_cumsum.copy()
+df_0 = sleep_cumsum.copy()
 base_freq = "4S"
 target_freq = "1H"
 
-data = prep.convert_to_units(data,
+df_1 = prep.convert_to_units(df_0,
                              base_freq,
                              target_freq)
-
-import matplotlib.pyplot as plt
 
 def my_decorator(func):
     def wrapper():
@@ -82,11 +80,10 @@ def single_plot_kwarg_decorator(func):
     :param func:
     :return:
     """
-    def wrapper(*args, **kwargs):
+    def wrapper(data, *args, **kwargs):
         # this is only for a single plot so can set xlabel and ylabel
         # can call plots here
         fig, ax = plt.subplots()
-        print(kwargs)
 
         # call the plotting function which will create the plots
         # and set the default values for all the labels
@@ -125,9 +122,9 @@ def show_savefig_decorator(func):
     :param func:
     :return:
     """
-    def wrapper(*args, **kwargs):
+    def wrapper(data, *args, **kwargs):
         
-        fig, ax = func(*args, **kwargs)
+        fig, ax = func(data, *args, **kwargs)
         
         if "figsize" in kwargs:
             fig.set_size_inches(kwargs["figsize"])
@@ -139,23 +136,40 @@ def show_savefig_decorator(func):
             
     return wrapper
 
+
 @show_savefig_decorator
 @single_plot_kwarg_decorator
-def cumsum(data, fig, ax):
+def _plot_cumulative_stage(data,
+                           fig,
+                           ax,
+                           *args,
+                           **kwargs):
     """
-    Function to plot cumulative sum
+    Function to take in data of scored stage and do a cumulative plot of
+    each column on the same axis
+    :param data:
+    :param args:
+    :param kwargs:
+    :return:
     """
+    # plot each day on the same axis and create a legend for it
     for col in data:
         data_to_plot = data.loc[:,col]
         ax.plot(data_to_plot,
                 label=col)
     fig.legend()
-    params_dict = {"xlabel":"ZT/CT",
-                   "ylabel":"hours",
-                   "title":"Cumulative stage",
-                   "interval":2}
+    ax.set(xlim=[data.index[0], data.index[-1]])
+    
+    params_dict = {
+        "interval":2,
+        "xlabel": "ZT/CT",
+        "ylabel": "Cumulative stage (hours)",
+        "title": "Cumulative stage over days"
+    }
+    
     return fig, ax, params_dict
 
+_plot_cumulative_stage(df_1)
 
 #
 # for col in data:

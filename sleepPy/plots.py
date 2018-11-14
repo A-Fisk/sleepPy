@@ -10,6 +10,8 @@ sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
 import sleepPy.preprocessing as prep
 from actigraphy_analysis.preprocessing \
     import separate_by_condition
+from actigraphy_analysis.plots import \
+    single_plot_kwarg_decorator, show_savefig_decorator
 
 # Function for plotting by stage
 def plot_by_stage(data,
@@ -123,7 +125,8 @@ def _sort_separated_list(data_list,
                          reverse=False)
     return sorted_list
 
-
+@show_savefig_decorator
+@single_plot_kwarg_decorator
 def _plot_cumulative_stage(data,
                            *args,
                            **kwargs):
@@ -135,9 +138,9 @@ def _plot_cumulative_stage(data,
     :param kwargs:
     :return:
     """
-
     fig, ax = plt.subplots()
-
+    
+    # plot each day on the same axis and create a legend for it
     for col in data:
         data_to_plot = data.loc[:,col]
         ax.plot(data_to_plot,
@@ -145,38 +148,15 @@ def _plot_cumulative_stage(data,
     fig.legend()
     ax.set(xlim=[data.index[0], data.index[-1]])
     
-    # tidy up with kwargs and labels
-    fig.autofmt_xdate()
-    xfmt = mdates.DateFormatter("%H:%M:%S")
-    ax.xaxis.set_major_formatter(xfmt)
-    interval = 2
-    if "interval" in kwargs:
-        interval = kwargs["interval"]
-    ax.xaxis.set_major_locator(mdates.HourLocator(interval=interval))
+    params_dict = {
+        "interval":2,
+        "xlabel": "ZT/CT",
+        "ylabel": "Cumulative stage (hours)",
+        "title": "Cumulative stage over days"
+    }
+    
+    return fig, ax, params_dict
 
-    xlabel = "ZT/CT"
-    if "xlabel" in kwargs:
-        xlabel = kwargs["xlabel"]
-    ax.set_xlabel(xlabel)
-
-    ylabel = "Cumulative stage (Hours)"
-    if "ylabel" in kwargs:
-        ylabel = kwargs["ylabel"]
-    ax.set_ylabel(ylabel)
-
-    title = "Cumulative stage over days"
-    if "title" in kwargs:
-        title = kwargs["title"]
-    fig.suptitle(title)
-
-    if "figsize" in kwargs:
-        fig.set_size_inches(kwargs["figsize"])
-    if "showfig" in kwargs and kwargs["showfig"]:
-        plt.show()
-    if "savefig" in kwargs and kwargs["savefig"]:
-        plt.savefig(kwargs["fname"])
-        plt.close()
-     
 def plot_cumulative_from_stage_df(data,
                                   stages=None,
                                   base_freq=None,
