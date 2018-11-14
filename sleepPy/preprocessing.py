@@ -12,7 +12,7 @@ sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
                 "actigraphy_analysis")
 from actigraphy_analysis.preprocessing \
     import SaveObjectPipeline, create_file_name_path, create_subdir, \
-        remove_object_col
+        remove_object_col, read_file_to_df
 
 
 
@@ -247,8 +247,8 @@ def sum_power(data,
     return summed
 
 def create_df_for_single_band(data,
-                              name_of_band,
-                              range_to_sum):
+                              name_of_band=(),
+                              range_to_sum=()):
     """
     Function to remove object column, sum up frequency, then add
     back in the sleep stage data and name the column
@@ -283,11 +283,8 @@ def create_scored_df(data,
     return df
 
 
-def get_all_files_per_animal(input_dir,
-                             anim_range=[0,3],
-                             derivation_range=[11,14],
-                             single_der=True,
-                             der_no=0):
+def get_all_files_per_animal(file_list,
+                             anim_range=[0,3]):
     """
     Function to get a list of file names of a single derivation for
     each animal
@@ -296,31 +293,20 @@ def get_all_files_per_animal(input_dir,
     :param derivation_range:
     :return:
     """
-    file_list = list(input_dir.glob("*.csv"))
     
     # get all the animal names and derivation_names
     anim_list = []
-    der_list = []
     for file in file_list:
         anim = file.name[anim_range[0]:anim_range[-1]]
         anim_list.append(anim)
-        der = file.name[derivation_range[0]:derivation_range[-1]]
-        der_list.append(der)
     unique_anim = list(set(anim_list))
-    unique_ders = list(set(der_list))
 
     # read all the file names for a single or all derivations into the dict
     dict_animal_day_files = {}
-    der_to_use = unique_ders[der_no]
     for animal in unique_anim:
-        if single_der:
-            animal_day_files = sorted(
-                input_dir.glob(animal+"*"+der_to_use+"*.csv")
-            )
-        else:
-            animal_day_files = sorted(
-                 input_dir.glob(animal+"*.csv")
-            )
+        animal_day_files = sorted(
+             input_dir.glob(animal+"*.csv")
+        )
         dict_animal_day_files[animal] = animal_day_files
     
     return dict_animal_day_files
@@ -416,3 +402,32 @@ def convert_to_units(data,
     new_data = data.copy()
     new_data = (new_data * base_secs) / target_secs
     return new_data
+
+
+def _get_derivation_values(data,
+                           level_of_index=0):
+    derivation_values = data.index.get_level_values(level_of_index).unique()
+    return derivation_values
+    
+def _split_list_of_derivations(data,
+                               level_of_index=0):
+    """
+    Function to take dataframe in and split into a list of dataframes
+    based on value of given level of multi-index
+    :param data:
+    :return:
+    """
+    # step one, get all the derivation values
+    derivation_values = _get_derivation_values(data,
+                                               level_of_index=level_of_index)
+
+    # Step two, slice the df by derivation and put in list
+    list_of_dfs = []
+    for derivation in derivation_values:
+        temp_df = data.loc[derivation]
+        list_of_dfs.append(temp_df)
+        
+    return list_of_dfs
+
+
+# TODO update to remove 0 values <- where "Stage" = nan

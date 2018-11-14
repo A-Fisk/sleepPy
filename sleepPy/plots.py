@@ -7,11 +7,16 @@ import matplotlib.dates as mdates
 import sys
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
                    "07_python_package/sleepPy")
-import sleepPy.preprocessing as prep
+sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
+                "actigraphy_analysis")
+from sleepPy.preprocessing import \
+    _split_list_of_derivations, artefacts_null, create_df_for_single_band
 from actigraphy_analysis.preprocessing \
     import separate_by_condition
 from actigraphy_analysis.plots import \
-    single_plot_kwarg_decorator, show_savefig_decorator
+    single_plot_kwarg_decorator, \
+    multiple_plot_kwarg_decorator, \
+    show_savefig_decorator
 
 # Function for plotting by stage
 def plot_by_stage(data,
@@ -184,3 +189,127 @@ def plot_cumulative_from_stage_df(data,
                            *args,
                            **kwargs)
     
+    
+def _create_plot_ready_stages_list(data,
+                                   label_col=-1):
+    """
+    Function to take in single dataframe, remove artefacts,
+    separate into stages and sort the stages list
+    :param data:
+    :return:
+    """
+    artefact_free_df = artefacts_null(data).dropna(axis=0)
+    separated_data_list = separate_by_condition(artefact_free_df,
+                                                label_col=label_col)
+    sorted_data_list = _sort_separated_list(separated_data_list,
+                                            label_col=label_col)
+    return sorted_data_list
+
+
+@show_savefig_decorator
+@multiple_plot_kwarg_decorator
+def _plot_hypnogram_from_list(data_list,
+                              label_col=-1,
+                              base_freq="4S",
+                              plot_epochs=False,
+                              sharey=True,
+                              **kwargs):
+    """
+    Function to take list separated into derivations and plot each
+    derivation on a separate subplot
+    :param data_list:
+    :param label_col:
+    :param base_freq:
+    :param plot_epochs:
+    :return:
+    """
+    # AIM plot each derivation on a subplot
+
+    # create the correct number of subplots
+    fig, ax = plt.subplots(nrows=len(data_list),
+                           sharex=True,
+                           sharey=sharey)
+     
+    # generate a dict of colour keys
+    colour_keys = {"W":"b",
+                   "NR":"g",
+                   "R":"r",
+                   "M":"b"}
+    if "colour_keys" in kwargs:
+        colour_keys = kwargs["colour_keys"]
+        
+    # iterate through the subplots and plot each derivation on that subplot
+    for curr_axis, der_df in zip(ax, data_list):
+        # preprocess the data
+        # set artefacts to be null, separate into a sorted list of conditions
+        stages_list = _create_plot_ready_stages_list(der_df,
+                                                     label_col=label_col)
+        
+        # loop through the list of separate stages and plot on the same axis
+        for curr_df in stages_list:
+            # remove interpolation lines and label col by resampling
+            data_to_plot = curr_df.resample(base_freq).mean()
+            # for quality control, allow option to plot by epoch number
+            if plot_epochs:
+                data_to_plot = data_to_plot.reset_index(drop=true)
+            # grab the value of the stage for labelling
+            label = curr_df.iloc[0,label_col]
+            curr_axis.plot(data_to_plot,
+                           colour_keys[label],
+                           label=label)
+            
+    # set the legend using only the final subplot values
+    handles, labels = ax[-1].get_legend_handles_labels()
+    fig.legend(handles, labels)
+    
+    # set the default values
+    param_dict = {
+        "xlim":[der_df.index[0],der_df.index[-1]],
+        "xlabel":"ZT/CT",
+        "ylabel":"Power v2 (?)",
+        "title":("%s over time" %der_df.columns[0]),
+        "interval":3
+    }
+    if plot_epochs:
+        param_dict["xlabel"] = "Epoch No"
+    
+    return fig, ax[-1], param_dict
+
+
+def plot_hypnogram_from_df(data,
+                           name_of_band=["Delta"],
+                           range_to_sum=("0.50Hz", "4.00Hz"),
+                           level_of_index=0,
+                           label_col=-1,
+                           base_freq="4S",
+                           plot_epochs=False,
+                           set_file_title=True,
+                           **kwargs):
+    """
+    Function to take in dataframe with multiple derivations,
+    sum the given power band, then plot the hypnogram
+    :param data:
+    :param kwargs:
+    :return:
+    """
+    # first step, sum the given band
+    band_df = create_df_for_single_band(data,
+                                        name_of_band=name_of_band,
+                                        range_to_sum=range_to_sum)
+    # Separate out into a list of derivations
+    list_of_derivations = _split_list_of_derivations(band_df,
+                                             level_of_index=level_of_index
+                                             )
+    
+    # set the title of the plot to be the file name
+    if set_file_title:
+        kwargs["title"] = kwargs["fname"].stem
+    
+    # plot the hypnogram from the list of derivations
+    _plot_hypnogram_from_list(list_of_derivations,
+                              label_col=label_col,
+                              base_freq=base_freq,
+                              plot_epochs=plot_epochs,
+                              **kwargs)
+    
+
