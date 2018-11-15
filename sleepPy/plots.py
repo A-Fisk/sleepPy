@@ -257,12 +257,8 @@ def _plot_hypnogram_from_list(data_list,
             curr_axis.plot(data_to_plot,
                            colour_keys[label],
                            label=label)
-            
-    # set the legend using only the final subplot values
-    handles, labels = ax[-1].get_legend_handles_labels()
-    fig.legend(handles, labels)
     
-    # set the default values
+    # set the default values dict
     param_dict = {
         "xlim":[der_df.index[0],der_df.index[-1]],
         "xlabel":"ZT/CT",
@@ -283,7 +279,8 @@ def plot_hypnogram_from_df(data,
                            label_col=-1,
                            base_freq="4S",
                            plot_epochs=False,
-                           set_file_title=True,
+                           set_file_title=False,
+                           set_name_title=True,
                            **kwargs):
     """
     Function to take in dataframe with multiple derivations,
@@ -301,9 +298,12 @@ def plot_hypnogram_from_df(data,
                                              level_of_index=level_of_index
                                              )
     
-    # set the title of the plot to be the file name
+    # set the title of the plot to be the file name or
+    # period name if needed
     if set_file_title:
         kwargs["title"] = kwargs["fname"].stem
+    if set_name_title:
+        kwargs["title"] = kwargs["fname"].stem + "_" + data.name
     
     # plot the hypnogram from the list of derivations
     _plot_hypnogram_from_list(list_of_derivations,

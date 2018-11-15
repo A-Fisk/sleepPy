@@ -15,6 +15,7 @@ from actigraphy_analysis.preprocessing \
         remove_object_col, read_file_to_df
 
 
+####### Functions for read original FFT file #######
 
 def _create_index_list(data=(),
                        no_of_channels=()):
@@ -182,7 +183,142 @@ def read_clean_fft_file(file=(),
     
     return final_df
 
+
+####### Functions for reading all files for an animal #######
+##### Functions for creating list of animal files #####
+
+def _find_unique_anims(file_list,
+                       anim_range):
+    """
+    Returns a list of the unique strings for the range given in the file list
+    :param file_list:
+    :param anim_range:
+    :return:
+    """
+    # get a list of all the unique animal values in the file list
+    anim_list = []
+    for file in file_list:
+        anim_str = (file.stem[anim_range[0]:anim_range[-1]])
+        anim_list.append(anim_str)
+    unique_anims = list(set(anim_list))
     
+    return unique_anims
+
+
+def _create_single_animal_file_list(anim_str,
+                                    input_dir=()):
+    # get a list of all the unique files for just one animal
+    animal_file_list = sorted(input_dir.glob((anim_str + "*.txt")))
+    
+    return animal_file_list
+
+
+def create_dict_of_animal_lists(file_list,
+                                input_dir,
+                                anim_range,
+                                **kwargs):
+    """
+    Function to return lists of [list of files for single animal]
+    :param file_list:
+    :param anim_range:
+    :return:
+    """
+    # find all the unique animals in the file list
+    unique_anims = _find_unique_anims(file_list,
+                                      anim_range)
+    # for each unique animal, create a list of all it's files and save
+    # it in a list
+    dict_of_animal_lists = {}
+    for anim in unique_anims:
+        animal_file_list = _create_single_animal_file_list(anim,
+                                                           input_dir)
+        dict_of_animal_lists[anim] = animal_file_list
+        
+    return dict_of_animal_lists
+
+
+##### Functions for creating df for a given list of files #####
+
+def _label_dict():
+    "Just hides the label dict creation"
+    # generate a dictionary of labels to use for each day
+    keys = ["1804%02d" %x for x in range(9,27)]
+    baseline_labels = ["Baseline_-%s" %x for x in range(1,-1,-1)]
+    post_labels = ["Post_%s" %x for x in range(0,2)]
+    ll_labels = ["LL_%s" %x for x in range(len(keys)-(len(baseline_labels) +
+                                                      len(post_labels)))]
+    labels = baseline_labels + ll_labels + post_labels
+    label_dict = dict(zip(keys, labels))
+    return label_dict
+
+
+def _create_set_day(day_file=(),
+                    label_dict=(),
+                    day_range=(),
+                    period_label=()):
+    """
+    Gets the day file with the correct label from the dict as the highest
+    level of the multi-index
+    :param day_file:
+    :param label_dict:
+    :param day_range:
+    :return:
+    """
+    # grab just the day from the file_list
+    day = day_file.stem[day_range:]
+
+    # find what label that should be based on a given dict
+    label = label_dict[day]
+
+    # label the dataframe as that label
+    day_df = read_clean_fft_file(day_file)
+    day_df[period_label] = label
+
+    # set the index with label as the first level of the index
+    temp_day = day_df.set_index(period_label, append=True)
+    set_day = temp_day.reorder_levels([2,0,1])
+    
+    return set_day
+
+
+def single_df_for_animal(animal_file_list=(),
+                         day_range=(),
+                         period_label=(),
+                         label_dict=None,
+                         **kwargs):
+    """
+    Function to loop through all files in file list and put them into
+    a big df with labelled multi-index by the label_dict
+    :param animal_file_list:
+    :param day_range:
+    :param label_dict:
+    :param period_label:
+    :return:
+    """
+    # create the label_dict
+    if not label_dict:
+        label_dict = _label_dict()
+    # create list to hold set days
+    list_of_days = []
+    # loop through all the days for a given animal
+    for day_file in animal_file_list:
+        # get the properly ordered df
+        set_day_df = _create_set_day(day_file=day_file,
+                                     label_dict=label_dict,
+                                     day_range=day_range,
+                                     period_label=period_label)
+        
+        # put this day into a list
+        list_of_days.append(set_day_df)
+    # concatenate all the days into a giant df
+    animal_df = pd.concat(list_of_days)
+    
+    return animal_df
+
+
+####### Functions for
+
+
 def check_data_columns(data):
         """
         checks data has been imported correctly by checking the value
@@ -394,8 +530,8 @@ def _split_list_of_derivations(data,
     :return:
     """
     # step one, get all the derivation values
-    derivation_values = _get_derivation_values(data,
-                                               level_of_index=level_of_index)
+    derivation_values = _get_index_values(data,
+                                          level_of_index=level_of_index)
 
     # Step two, slice the df by derivation and put in list
     list_of_dfs = []
@@ -404,6 +540,26 @@ def _split_list_of_derivations(data,
         list_of_dfs.append(temp_df)
         
     return list_of_dfs
+
+
+def _sep_by_top_index(df):
+    """
+    Function returns list of dataframes defined by the level 0 of the
+    multi-index
+    :param df:
+    :return:
+    """
+    # create list of unique values of given index level
+    index_vals = _get_index_values(df, level_of_index=0)
+
+    # loop through and slice the df based on the unique index vals
+    separated_list = []
+    for value in index_vals:
+        temp_df = df.loc[value]
+        temp_df.name = value
+        separated_list.append(temp_df)
+    
+    return separated_list
 
 
 # TODO update to remove 0 values <- where "Stage" = nan
