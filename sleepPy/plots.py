@@ -10,7 +10,8 @@ sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
                 "actigraphy_analysis")
 from sleepPy.preprocessing import \
-    _split_list_of_derivations, artefacts_null, create_df_for_single_band
+    _split_list_of_derivations, artefacts_null, create_df_for_single_band, \
+    score_whole_df, convert_to_units
 from actigraphy_analysis.preprocessing \
     import separate_by_condition
 from actigraphy_analysis.plots import \
@@ -131,7 +132,7 @@ def _sort_separated_list(data_list,
     return sorted_list
 
 @show_savefig_decorator
-@single_plot_kwarg_decorator
+@multiple_plot_kwarg_decorator
 def _plot_cumulative_stage(data,
                            *args,
                            **kwargs):
@@ -179,11 +180,11 @@ def plot_cumulative_from_stage_df(data,
     :param kwargs:
     :return:
     """
-    scored_df = prep.score_whole_df(data,stages)
+    scored_df = score_whole_df(data,stages)
     cumsum_df = scored_df.cumsum()
-    data = prep.convert_to_units(cumsum_df,
-                                 base_freq,
-                                 target_freq)
+    data = convert_to_units(cumsum_df,
+                            base_freq,
+                            target_freq)
     kwargs["title"] = kwargs["fname"].stem[:end_of_title]
     _plot_cumulative_stage(data,
                            *args,
@@ -257,6 +258,8 @@ def _plot_hypnogram_from_list(data_list,
             curr_axis.plot(data_to_plot,
                            colour_keys[label],
                            label=label)
+        # label the axis with the current derivation
+        curr_axis.set(ylabel=der_df.name)
     
     # set the default values dict
     param_dict = {
@@ -313,3 +316,20 @@ def plot_hypnogram_from_df(data,
                               **kwargs)
     
 
+def plot_hypnogram_from_list(data_list, fname="", **kwargs):
+    """
+    Function to loop through all the values in a list of dataframes and
+    call plot hypnogram from df on all of them
+    :param data_list:
+    :param file:
+    :param kwargs:
+    :return:
+    """
+    # loop through and call plot hypnogram from df on all of them
+    for df in data_list:
+        new_fname = fname.with_name((fname.stem +
+                                     "_" +
+                                     df.name +
+                                     fname.suffix))
+        plot_hypnogram_from_df(df, fname=new_fname, **kwargs)
+    

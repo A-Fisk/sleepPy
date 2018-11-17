@@ -245,7 +245,7 @@ def _label_dict():
     keys = ["1804%02d" %x for x in range(9,27)]
     baseline_labels = ["Baseline_-%s" %x for x in range(1,-1,-1)]
     post_labels = ["Post_%s" %x for x in range(0,2)]
-    ll_labels = ["LL_%s" %x for x in range(len(keys)-(len(baseline_labels) +
+    ll_labels = ["LL_day%s" %x for x in range(len(keys)-(len(baseline_labels) +
                                                       len(post_labels)))]
     labels = baseline_labels + ll_labels + post_labels
     label_dict = dict(zip(keys, labels))
@@ -345,7 +345,7 @@ def remove_extra_zeros(data):
 
 def artefacts_null(data,
                    stage_column="Stage",
-                   stages_list=["W","NR","R","M"]):
+                   stages_list=["W","NR","R"]):
     """
     Function to set all values which aren't in
      stages_list to np.nan, aimed to remove artefact values
@@ -537,6 +537,7 @@ def _split_list_of_derivations(data,
     list_of_dfs = []
     for derivation in derivation_values:
         temp_df = data.loc[derivation]
+        temp_df.name = derivation
         list_of_dfs.append(temp_df)
         
     return list_of_dfs
@@ -561,5 +562,35 @@ def _sep_by_top_index(df):
     
     return separated_list
 
+
+def create_stage_df(df,
+                    stage_col="Stage",
+                    **kwargs):
+    """
+    Function to take in the dataframe with multi-index of day-derivation-time
+    and return a dataframe of time, with "stage col" as a separate column for
+    each original day
+    :param df:
+    :param stage_col:
+    :param kwargs:
+    :return:
+    """
+    # Step one, select just the stage column from each day
+    # only select one derivation so not duplicating
+    second_level = df.index.get_level_values(1).unique()
+    single_der_df = df.xs(second_level[0], level=1)
+
+    # get the values of the first level
+    first_level = df.index.get_level_values(0).unique()
+    # loop through each day and select the stage for that day
+    stage_day_dict = {}
+    for day in first_level:
+        temp_df = single_der_df.loc[day, stage_col]
+        stage_day_dict[day] = temp_df
+        
+    # Create the final df
+    stage_df = pd.concat(stage_day_dict, axis=1)
+
+    return stage_df
 
 # TODO update to remove 0 values <- where "Stage" = nan
