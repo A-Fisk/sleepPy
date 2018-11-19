@@ -164,10 +164,13 @@ def _plot_cumulative_stage(data,
     return fig, ax, params_dict
 
 def plot_cumulative_from_stage_df(data,
+                                  scored=True,
                                   stages=None,
                                   base_freq=None,
                                   target_freq=None,
                                   end_of_title=3,
+                                  set_file_title=True,
+                                  set_name_title=False,
                                   *args,
                                   **kwargs):
     """
@@ -180,13 +183,21 @@ def plot_cumulative_from_stage_df(data,
     :param kwargs:
     :return:
     """
-    scored_df = score_whole_df(data,stages)
+    if scored:
+        scored_df = score_whole_df(data,stages)
+    else:
+        scored_df = data
+    
     cumsum_df = scored_df.cumsum()
-    data = convert_to_units(cumsum_df,
-                            base_freq,
-                            target_freq)
-    kwargs["title"] = kwargs["fname"].stem[:end_of_title]
-    _plot_cumulative_stage(data,
+    converted_data = convert_to_units(cumsum_df,
+                                     base_freq,
+                                     target_freq)
+    if set_file_title:
+        kwargs["title"] = kwargs["fname"].stem[:end_of_title]
+    if set_name_title:
+        kwargs["title"] = kwargs["fname"].stem[:end_of_title] + data.name
+
+    _plot_cumulative_stage(converted_data,
                            *args,
                            **kwargs)
     

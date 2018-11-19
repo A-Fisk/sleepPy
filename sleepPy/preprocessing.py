@@ -252,10 +252,41 @@ def _label_dict():
     return label_dict
 
 
+def _remove_tail(data, stage_col="Stage", none_label= "None", **kwargs):
+    """
+    Function to remove the tail of Nan scored value from df
+    takes in singel day df and finds the last point where scored
+    slices between the two and returns
+    :param data:
+    :param stage_col:
+    :param none_label:
+    :param kwargs:
+    :return:
+    """
+    # Trying to figure out how to remove tail of Nan scored area
+    # Need to grab the last index where still has a stage
+    # and remove everything after that
+    # Step one, grab the last index.
+    mask = data.loc[:,stage_col] == none_label
+    masked_data = data.mask(mask)
+    last_index_time = masked_data[::-1].first_valid_index()[2]
+    # grab the first index so can slice between
+    start_index_time = data.iloc[0].name[2]
+
+    # Now need to slice up until the last timestamp for all derivations
+    data_sliced = data.xs(slice(start_index_time,
+                                last_index_time),
+                          level= "Time",
+                          drop_level= False)
+    
+    return data_sliced
+
+
 def _create_set_day(day_file=(),
                     label_dict=(),
                     day_range=(),
-                    period_label=()):
+                    period_label=(),
+                    **kwargs):
     """
     Gets the day file with the correct label from the dict as the highest
     level of the multi-index
@@ -271,19 +302,20 @@ def _create_set_day(day_file=(),
     label = label_dict[day]
 
     # label the dataframe as that label
-    day_df = read_clean_fft_file(day_file)
+    day_df = read_clean_fft_file(day_file, **kwargs)
     day_df[period_label] = label
 
     # set the index with label as the first level of the index
     temp_day = day_df.set_index(period_label, append=True)
     set_day = temp_day.reorder_levels([2,0,1])
+    set_day = _remove_tail(set_day, **kwargs)
     
     return set_day
 
 
 def single_df_for_animal(animal_file_list=(),
-                         day_range=(),
-                         period_label=(),
+                         day_range=(-6),
+                         period_label="Light_period",
                          label_dict=None,
                          **kwargs):
     """
@@ -306,7 +338,8 @@ def single_df_for_animal(animal_file_list=(),
         set_day_df = _create_set_day(day_file=day_file,
                                      label_dict=label_dict,
                                      day_range=day_range,
-                                     period_label=period_label)
+                                     period_label=period_label,
+                                     **kwargs)
         
         # put this day into a list
         list_of_days.append(set_day_df)
@@ -345,7 +378,9 @@ def remove_extra_zeros(data):
 
 def artefacts_null(data,
                    stage_column="Stage",
-                   stages_list=["W","NR","R"]):
+                   stages_list=["W","NR","R"],
+                   other=np.nan,
+                   **kwargs):
     """
     Function to set all values which aren't in
      stages_list to np.nan, aimed to remove artefact values
@@ -361,7 +396,7 @@ def artefacts_null(data,
     # return the new data
     artefact_mask = data.loc[:,stage_column].isin(stages_list)
     df_nocol, cols = remove_object_col(data, return_cols=True)
-    masked_data = df_nocol.where(artefact_mask, other=np.nan)
+    masked_data = df_nocol.where(artefact_mask, other=other)
     for col in cols:
         col_name = col.name
         masked_data[col_name] = col
@@ -565,6 +600,10 @@ def _sep_by_top_index(df):
 
 def create_stage_df(df,
                     stage_col="Stage",
+                    remove_artefacts=False,
+                    artefact_stage_col="Stage",
+                    stages="",
+                    der_no=0,
                     **kwargs):
     """
     Function to take in the dataframe with multi-index of day-derivation-time
@@ -575,10 +614,18 @@ def create_stage_df(df,
     :param kwargs:
     :return:
     """
+    # only use the stages given if asked.
+    if remove_artefacts:
+        df = artefacts_null(df,
+                            artefact_stage_col,
+                            stages_list=stages,
+                            **kwargs)
+        
     # Step one, select just the stage column from each day
     # only select one derivation so not duplicating
     second_level = df.index.get_level_values(1).unique()
-    single_der_df = df.xs(second_level[0], level=1)
+    der_to_use = second_level[der_no]
+    single_der_df = df.xs(der_to_use, level=1)
 
     # get the values of the first level
     first_level = df.index.get_level_values(0).unique()
@@ -590,6 +637,7 @@ def create_stage_df(df,
         
     # Create the final df
     stage_df = pd.concat(stage_day_dict, axis=1)
+    stage_df.name = der_to_use
 
     return stage_df
 

@@ -11,61 +11,42 @@ import sleepPy.plots as plot
 
 # define import dir
 input_dir = pathlib.Path("/Users/angusfisk/Documents/01_PhD_files/01_projects"
-                         "/P3_LLEEG_Chapter3/01_data_files/06_fft_files/")
+                         "/P3_LLEEG_Chapter3/01_data_files/06_fft_files")
 save_dir = input_dir.parent
 subdir_name = "07_clean_fft_files"
 
 file_list = sorted(input_dir.glob("*.txt"))
-file = file_list[0]
+file = file_list
 
+# Got remove_tail working!!!
 
-read_kwargs = {
-    "period_label":"Light_period",
-    "anim_range":(0,3),
-    "day_range":(-6)
-}
+df = prep.single_df_for_animal(file)
 
+def _remove_tail(data, stage_col="Stage", none_label= "None", **kwargs):
+    """
+    Function to remove the tail of Nan scored value from df
+    takes in singel day df and finds the last point where scored
+    slices between the two and returns
+    :param data:
+    :param stage_col:
+    :param none_label:
+    :param kwargs:
+    :return:
+    """
+    # Trying to figure out how to remove tail of Nan scored area
+    # Need to grab the last index where still has a stage
+    # and remove everything after that
+    # Step one, grab the last index.
+    mask = data.loc[:,stage_col] == none_label
+    masked_data = data.mask(mask)
+    last_index_time = masked_data[::-1].first_valid_index()[1]
+    # grab the first index so can slice between
+    start_index_time = data.iloc[0].name[1]
 
-
-test_object = prep.SaveObjectPipeline(input_directory=input_dir,
-                                      save_directory=save_dir,
-                                      search_suffix=".txt",
-                                      readfile=False)
-
-animal_file_list = prep.create_dict_of_animal_lists(test_object.file_list,
-                                                    input_dir,
-                                                    **read_kwargs)
-kwargs = {
-    "save_suffix_file":"_clean.csv",
-    "savecsv":True,
-    "function":(prep, "single_df_for_animal"),
-    "subdir_name":subdir_name,
-    "object_list":animal_file_list.values(),
-    "file_list":animal_file_list.keys(),
-    "header":17,
-    "derivation_list":["fro", "occ", "foc"],
-    "der_label":"Derivation",
-    "time_index_column":(2),
-    "test_index_range":[0,1,2,-2,-1],
-    "period_label":"Light_period",
-    "anim_range":(0,3),
-    "day_range":(-6)
-}
-
-test_object.process_file(**kwargs)
-
-
-# # df = prep.read_clean_fft_file(file)
-#
-# animals_lists = prep.create_dict_of_animal_lists(file_list,
-#                                                  input_dir,
-#                                                  anim_range)
-#
-# animals_lists.keys()
-#
-#
-# animal_df = prep.single_df_for_animal(animals_lists["LL1"],
-#                                       day_range=day_range,
-#                                       period_label=period_label)
-
-
+    # Now need to slice up until the last timestamp for all derivations
+    data_sliced = data.xs(slice(start_index_time,
+                                last_index_time),
+                          level= "Time",
+                          drop_level= False)
+    
+    return data_sliced
