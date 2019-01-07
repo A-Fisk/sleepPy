@@ -1,6 +1,7 @@
 # script to run to check remove header working as expected
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import pathlib
 import sys
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
@@ -14,56 +15,49 @@ sns.set()
 input_dir = pathlib.Path("/Users/angusfisk/Documents/01_PhD_files/01_projects"
                          "/P3_LLEEG_Chapter3/01_data_files/07_clean_fft_files/")
 save_dir = input_dir.parents[1]
-subdir_name = "03_analysis_outputs/02_cumulative_plots/02_cumulative_delta"
+subdir_name = "03_analysis_outputs/03_spectrum/01_ct0_12/"
+
+der_names = ["fro", "occ", "foc"]
+stage_list = ["W", "NR", "R"]
+subdir_list = []
+for stage in stage_list:
+    for der in der_names:
+        temp_name = subdir_name + "/" + stage + "/" + der
+        subdir_list.append(temp_name)
 
 init_kwargs = {
-    "input_directory":input_dir,
-    "save_directory":save_dir,
-    "subdir_name":subdir_name,
-    "func":(prep, "read_file_to_df"),
-    "search_suffix":".csv",
-    "readfile":True,
-    "index_col":[0,1,2],
-    "header":[0]
+    "input_directory": input_dir,
+    "save_directory": save_dir,
+    "subdir_name": subdir_name,
+    "func": (prep, "read_file_to_df"),
+    "search_suffix": ".csv",
+    "readfile": True,
+    "index_col": [0, 1, 2],
+    "header": [0]
 }
-test_object = prep.SaveObjectPipeline(**init_kwargs)
+spectrum_object = prep.SaveObjectPipeline(**init_kwargs)
 
-delta_process_kwargs = {
-    "function": (prep, "create_df_for_single_band"),
+process_kwargs = {
+    "function": (prep, "_get_spectrum_between_times"),
     "savecsv": False,
-    "name_of_band": ["Delta"],
-    "range_to_sum": ("0.50Hz", "4.00Hz")
+    "stage": ["W"],
+    "stage_col": "Stage",
+    "time_start": "12:00:00",
+    "time_end": "00:00:00",
 }
-test_object.process_file(**delta_process_kwargs)
+spectrum_object.process_file(**process_kwargs)
 
-stage_object = prep.SaveObjectPipeline(**init_kwargs)
-process_kwargs ={
-    "function": (prep, "create_stage_df"),
-    "savecsv": False,
-    "object_list": test_object.processed_list,
-    "stage_col": "Delta",
-    "stages": ["NR", "R"],
-    "remove_artefacts": True,
-    "other": 0
-}
-stage_object.process_file(**process_kwargs)
+spectrum_list = prep._get_spectrum_between_times(df, **kwargs)
+
+spectrum_df = spectrum_list[0]
+
+data = spectrum_list
 
 plot_kwargs = {
-    "function": (plot, "plot_cumulative_from_stage_df"),
-    "data_list": stage_object.processed_list,
-    "remove_col": False,
-    "base_freq": "4S",
-    "target_freq": "1H",
-    "showfig": True,
-    "savefig": False,
-    "legend_loc": "center right",
-    # "figsize": (10,10),
-    "scored": False,
-    "ylabel": "Cumulative Delta Power",
-    "remove_stages": True,
+    "fname": file,
+    "legend": True,
 }
-stage_object.create_plot(**plot_kwargs)
 
-# plot.plot_cumulative_from_stage_df(df,
-#                                    **plot_kwargs)
+plot._plot_spectrum(data, **plot_kwargs)
+
 

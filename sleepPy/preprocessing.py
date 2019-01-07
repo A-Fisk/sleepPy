@@ -9,8 +9,8 @@ import sys
 import pandas as pd
 import numpy as np
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
-                "actigraphy_analysis")
-from actigraphy_analysis.preprocessing \
+                "actiPy")
+from actiPy.preprocessing \
     import SaveObjectPipeline, create_file_name_path, create_subdir, \
         remove_object_col, read_file_to_df
 
@@ -641,4 +641,150 @@ def create_stage_df(df,
 
     return stage_df
 
+
+###### Functions for plotting mean spectrum ######
+
+
+
+def _between_time_multiindex(data,
+                             time_start="12:00:00",
+                             time_end="00:00:00",
+                             levels_to_drop=[0,1],
+                             **kwargs):
+    """
+    Function to get between times when datetimeindex in multi-index
+    :param data:
+    :param time_start:
+    :param time_end:
+    :param levels_to_drop:
+    :param kwargs:
+    :return:
+    """
+    data_0 = data.reset_index(levels_to_drop)
+    sliced_data = data_0.between_time(time_start, time_end)
+
+    new_index_cols = [sliced_data.columns[x] for x in levels_to_drop]
+    new_index_cols.append(sliced_data.index)
+    sliced_data.set_index(new_index_cols, inplace=True)
+    
+    return sliced_data
+
+
+def _stage_spectrum(data,
+                    stage=[],
+                    stage_col="Stage"):
+    """
+    Computes the mean spectrum for the given stage
+    :param data:
+    :param stage:
+    :param stage_col:
+    :return:
+    """
+    # Step 1 - average the power spectrum over a stage
+    mask = data[stage_col].isin(stage)
+    stage_data = data.where(mask)
+
+    # take mean power spectrum
+    spectrum = stage_data.mean()
+    
+    return spectrum
+
+
+def _spectrum_df_per_day(data,
+                         der_label='',
+                         single_level=0,
+                         levels_to_drop=[0,1],
+                         **kwargs):
+    """
+    Function computes mean spectrum for each level of the single level
+    of index (default = 0 which is day)
+    :param data:
+    :param single_level:
+    :param levels_to_drop:
+    :param kwargs:
+    :return:
+    """
+    idx = pd.IndexSlice
+    
+    # create spectrum of each day
+    values = data.index.get_level_values(single_level).unique()
+    value_dir = {}
+    for day in values:
+        day_df = data.loc[idx[day,:],:]
+        day_df.index = day_df.index.droplevel(levels_to_drop)
+        day_spectrum = _stage_spectrum(day_df, **kwargs)
+        value_dir[day] = day_spectrum
+    spectrum_df = pd.concat(value_dir, axis=1, sort=True)
+    
+    spectrum_df.name = der_label
+    
+    return spectrum_df
+
+
+def _get_der_list(data,
+                  der_level=1,
+                  **kwargs):
+    """
+    Function to return a list of dataframes split by der_level
+    :param data:
+    :param der_level:
+    :param der_to_use:
+    :return:
+    """
+    idx = pd.IndexSlice
+    der_values = data.index.get_level_values(der_level).unique()
+    der_list = [data.loc[idx[:,x,:],:] for x in der_values]
+    der_dict = dict(zip(der_values, der_list))
+
+    return der_dict
+
+
+def _get_spectrum_between_times(data,
+                                time_start="",
+                                time_end="",
+                                **kwargs):
+    """
+    Function to get list of mean spectrum between two given times
+    :param data:
+    :param time_start:
+    :param time_end:
+    :param kwargs:
+    :return:
+    """
+
+    # Step 1 - select just a certain time of day
+    data = _between_time_multiindex(data,
+                                         time_start=time_start,
+                                         end_time=time_end)
+
+    # Step 2 - get spectrum df per day
+    der_dict = _get_der_list(data)
+
+    spectrum_list = [_spectrum_df_per_day(der_dict[x], der_label=x,
+                                               **kwargs)
+                     for x in der_dict]
+    
+    return spectrum_list
+ 
+
 # TODO update to remove 0 values <- where "Stage" = nan
+
+#
+def _sum_dataframe(data_list: list,
+                   stage_list: list):
+    """
+    Function that sums the stages given for each df in the data list
+    and returns as a dataframe
+    :param data_list:
+    :param stage_list:
+    :return:
+    """
+    sleep_dict = {}
+    for df in data_list:
+        name = df.name
+        value = df.isin(stage_list).sum()
+        sleep_dict[name] = value
+    sleep_count_df = pd.concat(sleep_dict).unstack()
+    
+    return sleep_count_df
+    

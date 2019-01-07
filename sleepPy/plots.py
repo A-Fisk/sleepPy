@@ -4,21 +4,22 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+import matplotlib.ticker as ticker
 import sys
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
                    "07_python_package/sleepPy")
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
-                "actigraphy_analysis")
+                "actiPy")
 from sleepPy.preprocessing import \
     _split_list_of_derivations, artefacts_null, create_df_for_single_band, \
     score_whole_df, convert_to_units
 
-from actigraphy_analysis.preprocessing \
+from actiPy.preprocessing \
     import separate_by_condition
-from actigraphy_analysis.plots import \
+from actiPy.plots import \
     single_plot_kwarg_decorator, \
     multiple_plot_kwarg_decorator, \
-    show_savefig_decorator
+    show_savefig_decorator, set_title_decorator
 
 # Function for plotting by stage
 def plot_by_stage(data,
@@ -345,3 +346,38 @@ def plot_hypnogram_from_list(data_list, fname="", **kwargs):
                                      fname.suffix))
         plot_hypnogram_from_df(df, fname=new_fname, **kwargs)
     
+    
+####### Plot spectrum #####
+
+
+@set_title_decorator
+@show_savefig_decorator
+@multiple_plot_kwarg_decorator
+def _plot_spectrum(data, tick_space=10, **kwargs):
+    """
+    Plots the spectrum on a single axis from multiple day
+    :param data:
+    :param kwargs:
+    :return:
+    """
+
+    fig, ax = plt.subplots()
+
+    for day in data:
+        data_to_plot = data.loc[:,day]
+        ax.plot(data_to_plot)
+        ax.set_yscale('log')
+        
+    # Tidy up the x axis
+    ax.xaxis.set_major_locator(ticker.MultipleLocator(tick_space))
+    ax.tick_params(axis="x", rotation=45)
+    
+    params_dict = {
+        "timeaxis": False,
+        "title": "Mean spectrum over multiple days",
+        "xlabel": "Frequency, Hz",
+        "ylabel": "Mean power, log units"
+    }
+    
+    return fig, ax, params_dict
+

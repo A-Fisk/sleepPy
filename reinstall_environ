@@ -1,5 +1,5 @@
 #!/bin/bash
 
-conda remove --name sleepPy --all
+conda remove --name sleepPy_environment --all
 
 conda env create -f environment.yml
