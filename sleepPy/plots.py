@@ -285,6 +285,8 @@ def _plot_hypnogram_from_list(data_list,
     }
     if plot_epochs:
         param_dict["xlabel"] = "Epoch No"
+        param_dict["timeaxis"] = False
+        param_dict["xlim"] = [data_to_plot.index[0], data_to_plot.index[-1]]
     
     return fig, ax[-1], param_dict
 
