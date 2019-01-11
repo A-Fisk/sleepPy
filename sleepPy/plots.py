@@ -239,10 +239,13 @@ def _plot_hypnogram_from_list(data_list,
     :return:
     """
     # AIM plot each derivation on a subplot
+    sharex = True
+    if plot_epochs:
+        sharex = False
 
     # create the correct number of subplots
     fig, ax = plt.subplots(nrows=len(data_list),
-                           sharex=True,
+                           sharex=sharex,
                            sharey=sharey)
      
     # generate a dict of colour keys
