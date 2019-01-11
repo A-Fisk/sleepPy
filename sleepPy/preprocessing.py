@@ -788,3 +788,29 @@ def _sum_dataframe(data_list: list,
     
     return sleep_count_df
     
+    
+    
+
+def lightdark_df(df_list: list,
+                 stage_list: list):
+    """
+    Converts all times between 00:00 and 12:00 as light period
+    12:00 to 00:00 as dark - sums given stage list
+    :param df_list:
+    :return:
+    """
+    light = [x.between_time("00:00:00", "12:00:00") for x in df_list]
+    dark = [x.between_time("12:00:00", "00:00:00") for x in df_list]
+    for dark_df, light_df, df in zip(dark, light, df_list):
+        name = df.name
+        dark_df.name = name
+        light_df.name = name
+        
+    time_of_day_dict = {}
+    time_of_day_dict["dark"] = _sum_dataframe(dark, stage_list)
+    time_of_day_dict["light"] = _sum_dataframe(light, stage_list)
+
+    time_of_day_df = pd.concat(time_of_day_dict)
+    
+    return time_of_day_df
+

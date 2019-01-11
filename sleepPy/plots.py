@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import matplotlib.ticker as ticker
 import sys
+import seaborn as sns
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/"
                    "07_python_package/sleepPy")
 sys.path.insert(0, "/Users/angusfisk/Documents/01_PhD_files/07_python_package/"
@@ -265,7 +266,7 @@ def _plot_hypnogram_from_list(data_list,
             data_to_plot = curr_df.resample(base_freq).mean()
             # for quality control, allow option to plot by epoch number
             if plot_epochs:
-                data_to_plot = data_to_plot.reset_index(drop=true)
+                data_to_plot = data_to_plot.reset_index(drop=True)
             # grab the value of the stage for labelling
             label = curr_df.iloc[0,label_col]
             curr_axis.plot(data_to_plot,
@@ -377,6 +378,60 @@ def _plot_spectrum(data, tick_space=10, **kwargs):
         "title": "Mean spectrum over multiple days",
         "xlabel": "Frequency, Hz",
         "ylabel": "Mean power, log units"
+    }
+    
+    return fig, ax, params_dict
+
+
+@multiple_plot_kwarg_decorator
+def _total_plot(data: pd.DataFrame,
+                **kwargs):
+    """
+    Plots box and whisker plot with overlying scatter of datapoints
+    :param data:
+    :param kwargs:
+    :return:
+    """
+    fig, ax = plt.subplots()
+
+    sns.swarmplot(data=data, color='k', ax=ax)
+    sns.boxplot(data=data, ax=ax, fliersize=0)
+
+    params_dict = {
+        "timeaxis": False,
+        "legend": False,
+        "title": "Total sleep per day",
+        "xlabel": "experimental day",
+        "ylabel": "total sleep (hours)"
+    }
+    
+    return fig, ax, params_dict
+
+
+@multiple_plot_kwarg_decorator
+def dark_light_plot(data: pd.DataFrame,
+                    x: str,
+                    y: str,
+                    hue: str,
+                    **kwargs):
+
+    fig, ax = plt.subplots()
+
+    sns.swarmplot(data=data, x=x, y=y, hue=hue, ax=ax,
+                  color='0.2', dodge=True)
+    sns.boxplot(data=data, x=x, y=y, hue=hue, ax=ax,
+                fliersize=0)
+
+    handles, labels = ax.get_legend_handles_labels()
+    legend = plt.legend(handles[0:2],
+                        labels[0:2])
+    
+    params_dict = {
+        "timeaxis": False,
+        "legend": False,
+        "title": "Total sleep per day",
+        "xlabel": False,
+        "ylabel": False,
     }
     
     return fig, ax, params_dict
