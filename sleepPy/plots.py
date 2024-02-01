@@ -473,6 +473,29 @@ def draw_sighlines(yval: float,
                         xmax=hxval_axes_val[1],
                         **kwargs)
 
+def get_xval_dates(curr_xval,
+                   minus_val: float,
+                   plus_val: float,
+                   curr_ax):
+    """
+    Works to get xvals to plot if dates
+    :param sig_list:
+    :param minus_val:
+    :param plus_val:
+    :param curr_ax:
+    :return:
+    """
+    hxvals = [curr_xval - minus_val, curr_xval + plus_val]
+    hxvals_num = [mdates.date2num(x) for x in hxvals]
+    hxvals_transformed = curr_ax.transLimits.transform(
+        [(hxvals_num[0], 0),
+         (hxvals_num[1], 0)]
+    )
+    hxvals_trans_xvals = hxvals_transformed[:, 0]
+    
+    return hxvals_trans_xvals
+    
+
 def get_xtick_dict(curr_ax):
     """
     Returns a dict of the locations of where each label is
@@ -482,7 +505,7 @@ def get_xtick_dict(curr_ax):
     """
     labels = curr_ax.get_xticklabels()
     locs = curr_ax.get_xticks()
-    label_text = [x.get_text() for x in labels]
+    label_text = [str(x.get_text()) for x in labels]
     label_loc_dict = dict(zip(label_text, locs))
     return label_loc_dict
 

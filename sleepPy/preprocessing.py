@@ -243,10 +243,12 @@ def _label_dict():
     "Just hides the label dict creation"
     # generate a dictionary of labels to use for each day
     keys = ["1804%02d" %x for x in range(9,27)]
-    baseline_labels = ["Baseline_-%s" %x for x in range(1,-1,-1)]
+    baseline_labels = ["Baseline_%s" %x for x in range(1,-1,-1)]
     post_labels = ["Post_%s" %x for x in range(0,2)]
-    ll_labels = ["LL_day%s" %x for x in range(len(keys)-(len(baseline_labels) +
-                                                      len(post_labels)))]
+    ll_labels = ["LL_day%s" %x for x in
+                 range(1,
+                       (len(keys)-(len(baseline_labels) + len(post_labels))+1))
+                 ]
     labels = baseline_labels + ll_labels + post_labels
     label_dict = dict(zip(keys, labels))
     return label_dict
@@ -417,9 +419,27 @@ def sum_power(data,
     summed = pd.DataFrame(sliced_by_freq.sum(axis=1))
     return summed
 
+def mean_power(data,
+              range_to_sum):
+    """
+    Function to sum over the range given as a string for column names
+    :param data:
+    :param range_to_sum:
+    :return:
+    """
+    # select just the columns want to sum and return those values
+    start = data.columns.get_loc(range_to_sum[0])
+    fin = data.columns.get_loc(range_to_sum[1])
+    sliced_by_freq = data.iloc[:,start:fin]
+    summed = pd.DataFrame(sliced_by_freq.mean(axis=1))
+    return summed
+
+
 def create_df_for_single_band(data,
                               name_of_band=(),
-                              range_to_sum=()):
+                              range_to_sum=(),
+                              sum: bool=True,
+                              mean: bool=False):
     """
     Function to remove object column, sum up frequency, then add
     back in the sleep stage data and name the column
@@ -428,13 +448,23 @@ def create_df_for_single_band(data,
     :param range_to_sum:
     :return:
     """
+    # remove stage col
     data_removed, cols = remove_object_col(data, return_cols=True)
-    data_summed = sum_power(data_removed,
-                            range_to_sum=range_to_sum)
+    # apply fx
+    if sum:
+        data_summed = sum_power(data_removed,
+                                range_to_sum=range_to_sum)
+    elif mean:
+        data_summed = mean_power(data_removed,
+                                 range_to_sum=range_to_sum)
+    else:
+        raise ValueError("Mean or sum, you must choose")
     data_summed.columns = name_of_band
+    # add stage col back in
     for col in cols:
         data_summed[col.name] = col
     return data_summed
+
 
 def create_scored_df(data,
                      stages_to_score,
@@ -454,7 +484,7 @@ def create_scored_df(data,
     return df
 
 
-def get_all_files_per_animal(file_list,
+def get_all_files_per_animal(input_dir,
                              anim_range=[0,3]):
     """
     Function to get a list of file names for a single animal
@@ -792,25 +822,51 @@ def _sum_dataframe(data_list: list,
     
 
 def lightdark_df(df_list: list,
-                 stage_list: list):
+                 stage_list: list,
+                 data_list: bool=True,
+                 **kwargs):
     """
     Converts all times between 00:00 and 12:00 as light period
     12:00 to 00:00 as dark - sums given stage list
     :param df_list:
     :return:
     """
-    light = [x.between_time("00:00:00", "12:00:00") for x in df_list]
-    dark = [x.between_time("12:00:00", "00:00:00") for x in df_list]
-    for dark_df, light_df, df in zip(dark, light, df_list):
-        name = df.name
-        dark_df.name = name
-        light_df.name = name
-        
     time_of_day_dict = {}
-    time_of_day_dict["dark"] = _sum_dataframe(dark, stage_list)
-    time_of_day_dict["light"] = _sum_dataframe(light, stage_list)
+    dark_name = "Dark"
+    light_name = "Light"
+    total_name = "Total"
+    if "dark_name" in kwargs:
+        dark_name = kwargs["dark_name"]
+    if "light_name" in kwargs:
+        light_name = kwargs["light_name"]
+    if "total_name" in kwargs:
+        total_name = kwargs["total_name"]
+    if data_list:
+        light = [x.between_time("00:00:00", "12:00:00") for x in df_list]
+        dark = [x.between_time("12:00:00", "00:00:00") for x in df_list]
+        for dark_df, light_df, df in zip(dark, light, df_list):
+            name = df.name
+            dark_df.name = name
+            light_df.name = name
+        time_of_day_dict[dark_name] = _sum_dataframe(dark, stage_list)
+        time_of_day_dict[light_name] = _sum_dataframe(light, stage_list)
 
-    time_of_day_df = pd.concat(time_of_day_dict)
+        time_of_day_df = pd.concat(time_of_day_dict)
+        
+    else:
+        light = df_list.between_time("00:00:00", "12:00:00")
+        dark = df_list.between_time("12:00:00", "00:00:00")
+        light.name = df_list.name
+        dark.name = df_list.name
+     
+        time_of_day_dict[dark_name] = dark.isin(stage_list).sum()
+        time_of_day_dict[light_name] = light.isin(stage_list).sum()
+        time_of_day_dict[total_name] = df_list.isin(stage_list).sum()
+        
+        time_of_day_df = pd.DataFrame(
+            pd.concat(time_of_day_dict)
+        ).unstack(level=0)
+        time_of_day_df.columns = time_of_day_df.columns.droplevel(0)
     
     return time_of_day_df
 
